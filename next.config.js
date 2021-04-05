@@ -1,4 +1,7 @@
 module.exports = {
+    images: {
+        domains: ['images.unsplash.com', 's.gravatar.com']
+    },
     webpack(config) {
       config.module.rules.push({
         test: /\.svg$/,

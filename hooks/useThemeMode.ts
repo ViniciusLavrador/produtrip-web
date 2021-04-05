@@ -4,6 +4,14 @@ export const useThemeMode = () => {
   const [currentMode, setCurrentMode] = useState<'light' | 'dark'>();
 
   useEffect(() => {
+    if (currentMode === 'dark' && !document.documentElement.classList.contains('dark')) {
+      document.documentElement.classList.add('dark');
+    } else if (currentMode === 'light' && document.documentElement.classList.contains('dark')) {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [currentMode]);
+
+  useEffect(() => {
     if (
       localStorage.getItem('theme') === 'dark' ||
       (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark').matches)

@@ -1,15 +1,16 @@
 import { ReactNode } from 'react';
 import cx from 'classnames';
 
-interface HeadingProps {
+interface TypographyProps {
   variant: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span';
   children: ReactNode;
   bold?: true;
+  light?: true;
   muted?: true;
   className?: string;
 }
 
-export const Typography = ({ variant = 'h1', children, bold, muted, className }: HeadingProps) => {
+export const Typography = ({ variant = 'h1', children, bold, light, muted, className }: TypographyProps) => {
   const hasSizingClass = className
     ? className.match(
         /text-xs|text-sm|text-base|text-lg|text-xl|text-2xl|text-3xl|text-4xl|text-5xl|text-6xl|text-7xl|text-8xl|text-9xl/
@@ -17,8 +18,8 @@ export const Typography = ({ variant = 'h1', children, bold, muted, className }:
     : false;
 
   const classes = cx(
-    className,
-    { 'font-bold': bold },
+    { 'font-light': light && !bold },
+    { 'font-bold': bold && !light },
     { 'text-gray-500 dark:text-gray-400': muted },
     { 'text-gray-800 dark:text-white': !muted },
     { 'text-lg': variant == 'h6' && !hasSizingClass },
@@ -27,7 +28,8 @@ export const Typography = ({ variant = 'h1', children, bold, muted, className }:
     { 'text-3xl': variant == 'h3' && !hasSizingClass },
     { 'text-4xl': variant == 'h2' && !hasSizingClass },
     { 'text-5xl': variant == 'h1' && !hasSizingClass },
-    { 'text-base': ['p', 'span'].includes(variant) && !hasSizingClass }
+    { 'text-base': ['p', 'span'].includes(variant) && !hasSizingClass },
+    className
   );
 
   switch (variant) {

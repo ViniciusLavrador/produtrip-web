@@ -35,11 +35,10 @@ export default function App({ Component, pageProps }: AppProps) {
         <title>Gestão de PDV - Produtrip</title>
       </Head>
       {/* <SocketIOProvider url={process.env.NEXT_PUBLIC_SOCKETIO_SERVER_DOMAIN}> */}
-      <AnimateSharedLayout>
-        <Navbar>
-          <Component {...pageProps} />
-        </Navbar>
-      </AnimateSharedLayout>
+
+      <Navbar>
+        <Component {...pageProps} />
+      </Navbar>
 
       <ToastContainer limit={3} />
       {/* </SocketIOProvider> */}

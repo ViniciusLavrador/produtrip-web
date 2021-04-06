@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
 import cx from 'classnames';
-import { ExtendedLogo, Logo, Avatar, Button, Typography } from '../components';
+import { ExtendedLogo, Logo, Avatar, Button, Typography, Card, UserCard } from '../components';
 import { useEffect } from 'react';
 import { getUserRoles } from 'helpers';
 
@@ -52,20 +52,8 @@ const WelcomePage = () => {
 
 const AuthenticatedHomePage = withAuthenticationRequired(() => {
   const { user } = useAuth0();
-
-  let roles = user[`${process.env.NEXT_PUBLIC_APP_DOMAIN}/roles`] as string[];
-
-  return (
-    <div className='flex flex-col p-5 w-full h-full'>
-      <Typography variant='h2'>{roles}</Typography>
-      <Avatar
-        size='md'
-        src='https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-        alt='trial avatar'
-      />
-      <Avatar size='md' src={user.picture} alt='trial avatar' />
-    </div>
-  );
+  const rootClasses = cx('w-full h-full');
+  return <div className={rootClasses}></div>;
 });
 
 const HomePage = () => {

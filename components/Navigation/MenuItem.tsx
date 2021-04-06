@@ -1,57 +1,102 @@
 import cx from 'classnames';
 import Link from 'next/link';
 import { UrlObject } from 'url';
-import { ButtonHTMLAttributes, DetailedHTMLProps, HTMLAttributes, ReactNode } from 'react';
+import { MouseEventHandler, cloneElement } from 'react';
+import { Typography } from 'components';
+import Tooltip from 'components/Tooltip/Tooltip';
+import { useThemeMode } from 'hooks';
+import { AnimatePresence } from 'framer-motion';
 
 type MenuItemVariants = 'button' | 'link';
 
-interface BaseMenuItemProps {
-  children: ReactNode;
+export type MenuItem = {
+  label: string;
+  icon: JSX.Element;
+} & (
+  | {
+      variant: Extract<MenuItemVariants, 'link'>;
+      href: string | UrlObject;
+      onClick?: never;
+    }
+  | { variant: Extract<MenuItemVariants, 'button'>; href?: never; onClick: MouseEventHandler<HTMLButtonElement> }
+);
+
+interface MenuItemProps {
   className?: string;
   plain?: true;
+  menuItem: MenuItem;
+  expand?: true;
 }
 
-interface MenuItemAsButtonProps extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
-  variant: Extract<MenuItemVariants, 'button'>;
-}
-
-interface MenuItemAsLinkProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
-  variant: Extract<MenuItemVariants, 'link'>;
-  href: string | UrlObject;
-}
-
-type MenuItemProps = BaseMenuItemProps & (MenuItemAsButtonProps | MenuItemAsLinkProps);
-
-export const MenuItem = (props: MenuItemProps) => {
+export const MenuItem = ({ menuItem, className, plain, expand }: MenuItemProps) => {
   const rootClasses = cx(
-    'flex flex-row flex-shrink-0 flex-grow-0 justify-between',
-    'px-4 py-2',
-    'my-1',
-    'rounded-lg',
-    'bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:bg-gray-600 hover:bg-gray-200 focus:bg-gray-200',
+    'group',
+    'flex flex-row justify-start gap-5',
+    { 'flex-shrink-0 flex-grow-0 rounded-lg px-4 py-2': expand },
+    { 'w-max rounded-full p-3': !expand },
+    'mx-1 my-2',
+    'select-none',
+    'bg-gray-200 dark:bg-gray-700',
+    'hover:bg-yellow-500 dark:hover:bg-yellow-500',
     'focus:outline-none focus:shadow-outline',
-    'hover:ring-2 hover:ring-yellow-300 hover:ring-opacity-40',
-    'focus:ring-2 focus:ring-yellow-300 focus:ring-opacity-100 focus:ring-offset-2 focus:ring-offset-yellow-100 ',
     'cursor-pointer',
-    props.className
+    className
+  );
+  const iconClasses = cx(
+    'w-6 h-6',
+    'flex-shrink-0 flex-grow-0',
+    'text-gray-800 group-hover:text-white dark:text-white',
+    'stroke-current stroke-0'
   );
 
-  if (props.variant === 'link') {
-    const { variant, href, className, plain, children, ...linkProps } = props;
+  const textClasses = cx('text-gray-800 dark:text-white group-hover:text-white');
+
+  const proppedIcon = cloneElement(menuItem.icon, { className: iconClasses });
+
+  if (menuItem.variant === 'link') {
+    const { label, href } = menuItem;
     return (
-      <Link href={href}>
-        <div className={!plain ? rootClasses : className} tabIndex={0} {...linkProps}>
-          {children}
-        </div>
-      </Link>
+      <AnimatePresence>
+        <Link href={href}>
+          {expand ? (
+            <div className={!plain ? rootClasses : className} tabIndex={0}>
+              {proppedIcon}
+              <Typography className={textClasses} variant='span'>
+                {label}
+              </Typography>
+            </div>
+          ) : (
+            <span>
+              <Tooltip content={label} arrow placement='right'>
+                <div className={!plain ? rootClasses : className} tabIndex={0}>
+                  {proppedIcon}
+                </div>
+              </Tooltip>
+            </span>
+          )}
+        </Link>
+      </AnimatePresence>
     );
   }
 
-  if (props.variant === 'button') {
-    const { variant, onClick, className, plain, children, ...buttonProps } = props;
+  if (menuItem.variant === 'button') {
+    const { label, onClick } = menuItem;
     return (
-      <button onClick={onClick} className={!plain ? rootClasses : className} tabIndex={0} {...buttonProps}>
-        {children}
+      <button onClick={onClick} className='w-full'>
+        {expand ? (
+          <div className={!plain ? rootClasses + ' my-0' : className} tabIndex={0}>
+            {proppedIcon}
+            <Typography className={textClasses} variant='span'>
+              {label}
+            </Typography>
+          </div>
+        ) : (
+          <Tooltip content={label} arrow placement='right'>
+            <div className={!plain ? rootClasses + ' my-0' : className} tabIndex={0}>
+              {proppedIcon}
+            </div>
+          </Tooltip>
+        )}
       </button>
     );
   }

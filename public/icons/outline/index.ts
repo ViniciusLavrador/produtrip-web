@@ -7,3 +7,7 @@ export { default as CalendarOutlineIcon } from './calendar.svg';
 export { default as ChartPieOutlineIcon } from './chart-pie.svg';
 export { default as MoonOutlineIcon } from './moon.svg';
 export { default as SunOutlineIcon } from './sun.svg';
+export { default as UserGroupOutlineIcon } from './user-group.svg';
+export { default as ChevronLeftOutlineIcon } from './chevron-left.svg';
+export { default as ChevronRightOutlineIcon } from './chevron-right.svg';
+export { default as SumOutlineIcon } from './sum.svg';

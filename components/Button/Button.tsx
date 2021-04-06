@@ -5,6 +5,7 @@ import Link from 'next/link';
 
 interface BaseButtonProps extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
   primary?: true;
+  rounded?: true;
 }
 
 interface LabeledLinkButtonProps {
@@ -39,11 +40,13 @@ type ButtonProps = BaseButtonProps &
   (LabeledLinkButtonProps | CustomizedLinkButtonProps | LabeledButtonProps | CustomizedButtonProps);
 
 export const Button = (props: ButtonProps) => {
-  const { className, label, children, href, name, primary, ...buttonProps } = props;
+  const { className, label, children, href, name, primary, rounded, ...buttonProps } = props;
 
   const buttonClasses = cx(
-    'px-5 py-3',
-    'rounded-lg',
+    { 'px-5 py-3': !rounded },
+    { 'p-4': rounded },
+    { 'rounded-lg': !rounded },
+    { 'rounded-full': rounded },
     'focus:outline-none focus:shadow-outline',
     'shadow-xl active:shadow-none',
     'text-center',

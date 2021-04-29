@@ -61,7 +61,7 @@ export const ExtendedLogo = ({ direction = 'row', size = 'sm', variant = 'both',
           <Typography variant='h2' className={subtitleClasses} muted>
             powered by{' '}
             <Typography variant='span' className={subtitleClasses} muted bold>
-              BI4u
+              3eConsulting
             </Typography>
           </Typography>
         </div>

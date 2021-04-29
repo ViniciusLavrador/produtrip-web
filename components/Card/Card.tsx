@@ -1,7 +1,6 @@
-import { FC, ReactNode } from 'react';
+import { FC, MouseEventHandler, ReactNode } from 'react';
 import { CardImage } from './CardImage';
 import { CardContent } from './CardContent';
-import { motion } from 'framer-motion';
 import cx from 'classnames';
 
 interface CardSubcomponents {
@@ -11,9 +10,10 @@ interface CardSubcomponents {
 export interface CardProps {
   variant?: 'column' | 'row';
   className?: string;
+  onClick?: MouseEventHandler<HTMLDivElement>;
 }
 
-export const Card: FC<CardProps> & CardSubcomponents = ({ children, className, variant = 'column' }) => {
+export const Card: FC<CardProps> & CardSubcomponents = ({ children, className, variant = 'column', onClick }) => {
   const rootClasses = cx(
     { 'flex flex-col': variant === 'column' },
     { 'flex flex-row': variant === 'row' },
@@ -26,7 +26,11 @@ export const Card: FC<CardProps> & CardSubcomponents = ({ children, className, v
     className
   );
 
-  return <div className={rootClasses}>{children}</div>;
+  return (
+    <div className={rootClasses} onClick={onClick}>
+      {children}
+    </div>
+  );
 };
 
 Card.Image = CardImage;

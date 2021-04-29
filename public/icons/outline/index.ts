@@ -11,3 +11,5 @@ export { default as UserGroupOutlineIcon } from './user-group.svg';
 export { default as ChevronLeftOutlineIcon } from './chevron-left.svg';
 export { default as ChevronRightOutlineIcon } from './chevron-right.svg';
 export { default as SumOutlineIcon } from './sum.svg';
+export { default as CheckOutlineIcon } from './check.svg';
+export { default as DuplicateOutlineIcon } from './duplicate.svg';

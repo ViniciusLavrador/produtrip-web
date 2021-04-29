@@ -36,7 +36,7 @@ interface CustomizedButtonProps {
   onClick: MouseEventHandler<HTMLButtonElement>;
 }
 
-type ButtonProps = BaseButtonProps &
+export type ButtonProps = BaseButtonProps &
   (LabeledLinkButtonProps | CustomizedLinkButtonProps | LabeledButtonProps | CustomizedButtonProps);
 
 export const Button = (props: ButtonProps) => {
@@ -63,7 +63,7 @@ export const Button = (props: ButtonProps) => {
         <Link href={href}>
           <div className={buttonClasses}>
             {label ? (
-              <Typography variant='span' bold className='w-full text-white dark:text-gray-800'>
+              <Typography variant='span' bold className='text-white dark:text-gray-800'>
                 {label}
               </Typography>
             ) : (
@@ -79,7 +79,7 @@ export const Button = (props: ButtonProps) => {
     <>
       <button className={buttonClasses} {...buttonProps}>
         {label ? (
-          <Typography variant='span' bold className='w-full text-white dark:text-gray-800'>
+          <Typography variant='span' bold className='text-white dark:text-gray-800'>
             {label}
           </Typography>
         ) : (

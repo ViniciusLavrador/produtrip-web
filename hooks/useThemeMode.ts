@@ -20,7 +20,7 @@ export const useThemeMode = () => {
     } else {
       setCurrentMode('light');
     }
-  }, []);
+  }, [currentMode]);
 
   const setDarkMode = () => {
     if (currentMode !== 'dark') {
@@ -45,8 +45,11 @@ export const useThemeMode = () => {
     localStorage.removeItem('theme');
   };
 
+  const getCurrentMode = () => currentMode;
+
   return {
     currentMode,
+    getCurrentMode,
     setDarkMode,
     setLightMode,
     setOSPreferenceMode,

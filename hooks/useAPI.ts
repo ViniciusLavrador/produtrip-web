@@ -7,10 +7,11 @@ export const useApi = (resource: string, fetchOptions?: RequestInit, getTokenSil
     data: null,
     error: null,
     isLoading: true,
+    revalidate: undefined,
   });
 
-  const { getAccessTokenSilently } = useAuth0();
-  const { data, error } = useSWR(`${process.env.NEXT_PUBLIC_API_SERVER_DOMAIN}:3000/${resource}`, async (url) => {
+  const { getAccessTokenSilently, getAccessTokenWithPopup } = useAuth0();
+  const { data, error, revalidate } = useSWR(`${process.env.NEXT_PUBLIC_API_SERVER_DOMAIN}:3000/${resource}`, async (url) => {
     // FIX PORT NUMBER
     const accessToken = await getAccessTokenSilently({
       audience: process.env.NEXT_PUBLIC_API_SERVER_DOMAIN,
@@ -34,6 +35,7 @@ export const useApi = (resource: string, fetchOptions?: RequestInit, getTokenSil
         ...state,
         error,
         isLoading: false,
+        revalidate: revalidate,
       });
     }
   }, [error]);
@@ -44,6 +46,7 @@ export const useApi = (resource: string, fetchOptions?: RequestInit, getTokenSil
         ...state,
         data,
         isLoading: false,
+        revalidate: revalidate,
       });
     }
   }, [data]);

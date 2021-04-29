@@ -17,13 +17,21 @@ import '../styles/globals.css';
 import { Navbar } from 'components';
 
 // Framer
-import { AnimateSharedLayout } from 'framer-motion';
+import { AnimateSharedLayout, motion } from 'framer-motion';
+
+// React Contexify
+import 'react-contexify/dist/ReactContexify.css';
+
+import * as Yup from 'yup';
+import { ptForm } from 'yup-locale-pt';
 
 const onRedirectCallback = (appState: AppState) => {
   Router.replace(appState?.returnTo || '/');
 };
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps, router }: AppProps) {
+  Yup.setLocale(ptForm);
+
   return (
     <Auth0Provider
       domain={process.env.NEXT_PUBLIC_AUTH0_TENANT_DOMAIN}
@@ -37,7 +45,22 @@ export default function App({ Component, pageProps }: AppProps) {
       {/* <SocketIOProvider url={process.env.NEXT_PUBLIC_SOCKETIO_SERVER_DOMAIN}> */}
 
       <Navbar>
-        <Component {...pageProps} />
+        <motion.div
+          key={router.route}
+          className='h-full w-full'
+          initial='pageInitial'
+          animate='pageAnimate'
+          variants={{
+            pageInitial: {
+              opacity: 0,
+            },
+            pageAnimate: {
+              opacity: 1,
+            },
+          }}
+        >
+          <Component {...pageProps} />
+        </motion.div>
       </Navbar>
 
       <ToastContainer limit={3} />

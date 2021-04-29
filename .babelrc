@@ -3,21 +3,21 @@
     "development": {
       "presets": ["next/babel"],
       "plugins": [
-          ["styled-components", { "ssr": true }],
+          
           ["inline-react-svg", {"caseSensitive": true}]
         ]
     },
     "production": {
       "presets": ["next/babel"],
       "plugins": [
-          ["styled-components", { "ssr": true }],
+          
           ["inline-react-svg", {"caseSensitive": true}]
         ]
     },
     "test": {
       "presets": [["next/babel", { "preset-env": { "modules": "commonjs" } }]],
       "plugins": [
-          ["styled-components", { "ssr": true }],
+          
           ["inline-react-svg", {"caseSensitive": true}]
         ]
     }

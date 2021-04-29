@@ -92,7 +92,13 @@ export const Menu = ({ open, expand }: MenuProps) => {
   };
 
   const menuItemsByRole: { [key: string]: MenuItem[] } = {
-    admin: [
+    ADMIN: [
+      { variant: 'link', label: 'Clientes', href: '/customers', icon: <BriefcaseSolidIcon /> },
+      { variant: 'link', label: 'Equipe', href: '/team', icon: <UserGroupSolidIcon /> },
+      { variant: 'link', label: 'Relatórios', href: '/reports', icon: <ChartBarSolidIcon /> },
+      { variant: 'link', label: 'Agenda', href: '/schedule', icon: <CalendarSolidIcon /> },
+    ],
+    USER: [
       { variant: 'link', label: 'Clientes', href: '/customers', icon: <BriefcaseSolidIcon /> },
       { variant: 'link', label: 'Equipe', href: '/team', icon: <UserGroupSolidIcon /> },
       { variant: 'link', label: 'Relatórios', href: '/reports', icon: <ChartBarSolidIcon /> },
@@ -101,7 +107,17 @@ export const Menu = ({ open, expand }: MenuProps) => {
   };
 
   const profileItemsByRole: { [key: string]: MenuItem[] } = {
-    admin: [
+    ADMIN: [
+      {
+        variant: 'button',
+        label: 'Trocar Tema',
+        onClick: toggleTheme,
+        icon: currentMode === 'light' ? <MoonSolidIcon /> : <SunSolidIcon />,
+      },
+      { variant: 'link', label: 'Meu Perfil', href: '/me', icon: <UserSolidIcon /> },
+      { variant: 'button', label: 'Sair', onClick: () => logout(), icon: <LogoutSolidIcon /> },
+    ],
+    USER: [
       {
         variant: 'button',
         label: 'Trocar Tema',
@@ -122,6 +138,7 @@ export const Menu = ({ open, expand }: MenuProps) => {
     'bg-white dark:bg-gray-800 md:bg-transparent md:dark:bg-transparent', // Has to Exist so Mobile Menu Has Color
     'z-40',
     'overflow-y-auto',
+    { shadow: open },
 
     // Slide
     'transform-gpu transition-transform ease-in-out duration-700',
@@ -146,7 +163,7 @@ export const Menu = ({ open, expand }: MenuProps) => {
                 exit={{ height: 0, marginTop: 0, marginBottom: 0 }}
                 className='overflow-hidden'
               >
-                {profileItemsByRole[user[`${process.env.NEXT_PUBLIC_APP_DOMAIN}/roles`]].map((menuItem) => (
+                {profileItemsByRole[user[`${process.env.NEXT_PUBLIC_APP_DOMAIN}/roles`]]?.map((menuItem) => (
                   <MenuItem key={(menuItem.href as string) || menuItem.label} menuItem={menuItem} expand={expand} />
                 ))}
               </motion.div>
@@ -154,7 +171,7 @@ export const Menu = ({ open, expand }: MenuProps) => {
           </AnimatePresence>
         </Profile>
 
-        {menuItemsByRole[user[`${process.env.NEXT_PUBLIC_APP_DOMAIN}/roles`]].map((menuItem) => (
+        {menuItemsByRole[user[`${process.env.NEXT_PUBLIC_APP_DOMAIN}/roles`]]?.map((menuItem) => (
           <MenuItem menuItem={menuItem} expand={expand} key={(menuItem.href as string) || menuItem.label} />
         ))}
       </div>

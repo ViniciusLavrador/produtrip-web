@@ -12,7 +12,7 @@ import LoadingAnimation from 'components/LoadingAnimation/LoadingAnimation';
 import { motion, AnimateSharedLayout, Variants, Transition } from 'framer-motion';
 import { ChevronRightOutlineIcon, ChevronLeftOutlineIcon } from 'public/icons/outline';
 
-const COPYRIGHT_TEXT = 'BI4u is a product by 3eConsulting ©';
+const COPYRIGHT_TEXT = 'Gestão de PDV is a product by 3eConsulting ©';
 
 const LoadingAuthenticationPage = () => {
   return (
@@ -78,7 +78,7 @@ export const Navbar = ({ children }: NavbarProps) => {
 
   const rootClasses = cx('flex flex-col md:flex-row');
   const sidebarClasses = cx(
-    'relative',
+    'fixed md:relative',
     'flex flex-col',
     'md:px-4 ',
     { 'w-full min-h-20 md:w-80 md:h-screen': expand },
@@ -93,7 +93,8 @@ export const Navbar = ({ children }: NavbarProps) => {
     'py-4 px-8 md:px-0 h-20',
     'z-50',
     'bg-white dark:bg-gray-800', // Has to exist so it overlaps Closed Components
-    'border-b border-gray-300 dark:border-gray-600'
+    'border-b border-gray-300 dark:border-gray-600',
+    'shadow md:shadow-none'
   );
 
   const footerClasses = cx(
@@ -105,7 +106,7 @@ export const Navbar = ({ children }: NavbarProps) => {
     'border-b border-gray-300 dark:border-gray-600'
   );
 
-  const mainClasses = cx('overflow-x-hidden overflow-y-auto', 'p-10', 'min-h-screen w-full');
+  const mainClasses = cx('overflow-x-hidden overflow-y-auto', 'p-10', 'mt-20', 'md:mt-0', 'min-h-screen w-full');
 
   const expandButtonClasses = cx('p-1 rounded-full absolute -right-7 bg-yellow-300', 'focus:outline-none focus:shadow-none');
   const expandIconClasses = cx('h-4 w-4');

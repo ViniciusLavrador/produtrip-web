@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router';
 import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
 import cx from 'classnames';
-import { ExtendedLogo, Logo, Avatar, Button, Typography, Card, UserCard } from '../components';
+import { ExtendedLogo, Button, Logo } from '../components';
 import { useEffect } from 'react';
-import { getUserRoles } from 'helpers';
+import { Map } from 'components/Map/Map';
 
 const PARTNERS_LOGIN_URL = '/partners/login';
 
@@ -43,7 +43,7 @@ const WelcomePage = () => {
         </div>
         <div className={actionRow}>
           <Button primary onClick={loginWithRedirect} label='Sou um Colaborador' />
-          <Button primary onClick={redirectToPartners} label='Sou um Parceiro' />
+          <Button primary disabled onClick={redirectToPartners} label='Sou um Parceiro' />
         </div>
       </div>
     </div>
@@ -52,8 +52,12 @@ const WelcomePage = () => {
 
 const AuthenticatedHomePage = withAuthenticationRequired(() => {
   const { user } = useAuth0();
-  const rootClasses = cx('w-full h-full');
-  return <div className={rootClasses}></div>;
+  const rootClasses = cx('w-full h-full flex justify-center items-center');
+  return (
+    <div className={rootClasses}>
+      <Logo size='3xl' className='opacity-30' />
+    </div>
+  );
 });
 
 const HomePage = () => {

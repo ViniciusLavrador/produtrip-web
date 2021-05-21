@@ -1,9 +1,9 @@
 import { useThemeMode } from 'hooks';
 import { ReactNode, useEffect, useState } from 'react';
-import MapGL, { FlyToInterpolator, GeolocateControl } from 'react-map-gl';
+import MapGL, { FlyToInterpolator, GeolocateControl, NavigationControl } from 'react-map-gl';
 import { Marker } from './Marker';
 import { Popup } from './Popup';
-import { easeCubic, easeCubicOut } from 'd3-ease';
+import { easeCubicOut } from 'd3-ease';
 
 const MAPBOX_TOKEN = 'pk.eyJ1IjoidmluaWNpdXNscCIsImEiOiJja250em91Mm8wNnZ3MzNsZGZxZTkxNGtzIn0.Q7ihAOcitydcdNMLFq74AQ';
 

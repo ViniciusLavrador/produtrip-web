@@ -1,15 +1,17 @@
 import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
-import { Button, LoadingAnimation, Typography } from 'components';
+import { Button, FormField, LoadingAnimation, Tooltip, Typography } from 'components';
 import { Breadcrumbs } from 'components/Breadcrumbs';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useApi } from 'hooks';
 import { useRouter } from 'next/router';
-import { ChevronDownOutlineIcon, ChevronUpOutlineIcon } from 'public/icons/outline';
+import { ChevronDownOutlineIcon, ChevronUpOutlineIcon, DuplicateOutlineIcon, SumOutlineIcon } from 'public/icons/outline';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import cx from 'classnames';
 import useOnclickOutside from 'react-cool-onclickoutside';
 import axios from 'axios';
+import Layout from 'components/Layout/Layout';
+import { Map } from 'components/Map';
 
 interface POSListProps {
   totalPOSData: any[];
@@ -73,7 +75,7 @@ const POSList = ({ previouslySelectedPOSData, totalPOSData, projectID }: POSList
       try {
         await axios.put(`${process.env.NEXT_PUBLIC_API_SERVER_DOMAIN}:3000/projects/${projectID}/pos`, {
           headers: { Authentication: `Bearer ${accessToken}` },
-          data: { pos: toRemove },
+          data: { pos: toAdd },
         });
       } catch (err) {
         toast.error('Falha ao Adicionar PDV', { toastId: 'projects/id/addPOS' });
@@ -186,53 +188,221 @@ const POSList = ({ previouslySelectedPOSData, totalPOSData, projectID }: POSList
   );
 };
 
+// -------
+// Fix Types
+export interface SideBarProps {
+  open: boolean;
+  setOpen: any;
+  totalPosList: any[];
+  initialSelection: any[];
+}
+
+export const POSSideBar = ({ open, setOpen, totalPosList }: SideBarProps) => {
+  const rootClasses = cx('w-full bg-white dark:bg-gray-800 rounded p-5', { 'h-full': open }, { 'h-auto': !open });
+  return (
+    <div className={rootClasses}>
+      <div onClick={() => (open ? setOpen(undefined) : setOpen('posList'))}>
+        <Typography variant='h4' className='text-center cursor-pointer select-none'>
+          Pontos de Venda
+        </Typography>
+      </div>
+      {open && (
+        <motion.div
+          initial='closed'
+          animate='open'
+          exit='closed'
+          variants={{
+            open: {
+              opacity: 1,
+              height: 'auto',
+            },
+            closed: {
+              opacity: 0,
+              height: 0,
+            },
+          }}
+        >
+          <div className='py-3 max-h-[300px] overflow-y-scroll'>
+            {totalPosList.map((pos) => {
+              return (
+                <label htmlFor={pos.id} className='flex flex-row items-center py-2 px-3' key={pos.id}>
+                  <input type='checkbox' name={pos.id} className='mr-5 transform-gpu scale-125' />
+                  <Typography variant='p' className='clear-both'>
+                    {pos.name}
+                  </Typography>
+                </label>
+              );
+            })}
+          </div>
+        </motion.div>
+      )}
+    </div>
+  );
+};
+
+// -- Visits
+export const VisitsSideBar = ({ open, setOpen, totalPosList }: SideBarProps) => {
+  const rootClasses = cx('w-full bg-white dark:bg-gray-800 rounded p-5', { 'h-full': open }, { 'h-auto': !open });
+  return (
+    <div className={rootClasses}>
+      <div onClick={() => (open ? setOpen(undefined) : setOpen('visitsList'))}>
+        <Typography variant='h4' className='text-center cursor-pointer select-none'>
+          Visitas Agendadas
+        </Typography>
+      </div>
+      {open && (
+        <motion.div
+          initial='closed'
+          animate='open'
+          exit='closed'
+          variants={{
+            open: {
+              opacity: 1,
+              height: 'auto',
+            },
+            closed: {
+              opacity: 0,
+              height: 0,
+            },
+          }}
+        >
+          <div className='py-3 max-h-[300px] overflow-y-scroll'>
+            {totalPosList.map((pos) => {
+              return (
+                <label htmlFor={pos.id} className='flex flex-row items-center py-2 px-3' key={pos.id}>
+                  <input type='checkbox' name={pos.id} className='mr-5 transform-gpu scale-125' />
+                  <Typography variant='p' className='clear-both'>
+                    {pos.name}
+                  </Typography>
+                </label>
+              );
+            })}
+          </div>
+        </motion.div>
+      )}
+    </div>
+  );
+};
+
+// -- POS Marker
+const toClipboard = (text: string) => {
+  navigator.clipboard.writeText(text);
+  toast.success('✔️ Copiado com sucesso !');
+};
+
+const POSMarker = ({ pos, active }: { pos: any; active: boolean }) => (
+  <Map.Marker active={active} longitude={parseFloat(pos.address.lng)} latitude={parseFloat(pos.address.lat)}>
+    <Typography variant='span' className='text-gray-900 text-xs' bold>
+      {pos.name}
+      <DuplicateOutlineIcon
+        className='stroke-current text-yellow-500 w-4 h-4 float-right cursor-pointer'
+        onClick={() => toClipboard(`PDV: ${pos.name} - ${pos.address.fullAddress}`)}
+      />
+    </Typography>
+    <Typography variant='p' className='text-gray-900 leading-tight text-[0.6rem]'>
+      {pos.address.fullAddress}
+    </Typography>
+  </Map.Marker>
+);
+
 export interface ProjectProps {}
 
 export const Project = ({}: ProjectProps) => {
+  const [open, setOpen] = useState<'posList' | 'visitsList' | undefined>();
+
+  const [mapFocus, setMapFocus] = useState<{ latitude: number; longitude: number; zoom?: number }>({
+    latitude: -14.2401,
+    longitude: -53.1805,
+    zoom: 3,
+  });
+
   const { query } = useRouter();
   let id = Buffer.from(query['id'] as string, 'base64').toString();
 
-  const { data: projectsData, error: projectsError, isLoading: projectsLoading } = useApi(`projects/${id}`);
-  const { data: posData, error: posError, isLoading: posLoading } = useApi(
-    projectsData && `companies/${projectsData.company.id}/pos`
-  );
+  const { data: projectData, error: projectError, isLoading: projectLoading } = useApi(`projects/${id}?r=company&r=pos`);
 
-  if (!projectsData || projectsLoading || projectsError) {
-    if (projectsError) {
-      toast.error(projectsError);
+  const {
+    data: totalPosData,
+    error: totalPosError,
+    isLoading: totalPosLoading,
+  } = useApi(projectData && `companies/${projectData.company.id}/pos`);
+
+  if (!projectData || projectLoading || projectError) {
+    if (projectError) {
+      toast.error(projectError);
     }
 
     return <LoadingAnimation size='2xl' />;
   }
 
-  if (!posData || posLoading || posError) {
-    if (posError) {
-      toast.error(posError);
+  if (!totalPosData || totalPosLoading || totalPosError) {
+    if (totalPosError) {
+      toast.error(totalPosError);
     }
 
     return <LoadingAnimation size='2xl' />;
   }
 
-  const project = projectsData;
-  const POS = posData;
-
-  console.log(project);
+  const FABRowClasses = cx('fixed bottom-10 right-10 flex flex-row gap-5 z-10');
 
   return (
-    <div className='h-full w-full'>
-      <div className='w-full mb-5'>
-        <Breadcrumbs>
-          <Breadcrumbs.ListItem
-            title={project.company.name}
-            href={`/customers/${Buffer.from(project.company.id).toString('base64')}`}
-          />
-          <Breadcrumbs.MainItem title={project.name} subtitle={project.contract} />
-        </Breadcrumbs>
-      </div>
-      <div className='w-full'>
-        <POSList totalPOSData={POS} previouslySelectedPOSData={[]} projectID={id} /> {/* fix previsoulySelectedPOSData */}
-      </div>
-    </div>
+    <Layout>
+      <Layout.Header
+        breadcrumb={{
+          main: { title: projectData.name, subtitle: projectData.contract },
+          list: [
+            { title: projectData.company.name, href: `/customers/${Buffer.from(projectData.company.id).toString('base64')}` },
+          ],
+        }}
+      />
+      <Layout.Content>
+        {/* <POSList totalPOSData={totalPosData} previouslySelectedPOSData={projectData.pos} projectID={id} /> */}
+        <div className='flex flex-row'>
+          <div className='w-1/3 flex flex-col gap-3'>
+            <POSSideBar
+              open={open == 'posList'}
+              setOpen={setOpen}
+              totalPosList={totalPosData}
+              initialSelection={projectData.pos}
+            />
+            <VisitsSideBar
+              open={open == 'visitsList'}
+              setOpen={setOpen}
+              totalPosList={totalPosData}
+              initialSelection={projectData.pos}
+            />
+          </div>
+          <div className='h-[550px] ml-5 w-full rounded shadow'>
+            <Map latitude={mapFocus.latitude} longitude={mapFocus.longitude} zoom={mapFocus.zoom} geolocateControl>
+              {projectData &&
+                projectData.pos &&
+                projectData.pos.length &&
+                projectData.pos.map((pos) => {
+                  if (pos.address) {
+                    return (
+                      <POSMarker
+                        key={pos.id}
+                        pos={pos}
+                        active={
+                          parseFloat(pos.address.lat) == mapFocus.latitude && parseFloat(pos.address.lng) == mapFocus.longitude
+                        }
+                      />
+                    );
+                  }
+                })}
+            </Map>
+          </div>
+        </div>
+
+        <div className={FABRowClasses}>
+          <Tooltip content='Visitas do Projeto' placement='top'>
+            <Button primary href={`/visits?projectID=${query['id']}`}>
+              <span className='flex flex-row justify-around'>Visitas</span>
+            </Button>
+          </Tooltip>
+        </div>
+      </Layout.Content>
+    </Layout>
   );
 };
 

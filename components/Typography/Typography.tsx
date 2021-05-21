@@ -17,7 +17,7 @@ export const Typography = ({ variant = 'h1', children, bold, light, muted, class
       )
     : false;
 
-  const hasColorClass = className ? className.match(/(^|\s)text-(\w*)-[0-9]{3}($|\s)/) : false;
+  const hasColorClass = className ? className.match(/(^|\s)text-(((\w*)-[0-9]{3})|black|white)($|\s)/) : false;
 
   const classes = cx(
     { 'font-light': light && !bold },

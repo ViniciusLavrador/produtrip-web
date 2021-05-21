@@ -10,6 +10,7 @@ import {
 
 import cx from 'classnames';
 import useOnclickOutside from 'react-cool-onclickoutside';
+import { useThemeMode } from 'hooks';
 
 export interface MarkerProps extends BaseMarkerProps {
   children?: ReactNode;
@@ -30,15 +31,20 @@ export const Marker = ({
 }: MarkerProps) => {
   let [popupOpen, setPopupOpen] = useState(false);
 
+  const { currentMode } = useThemeMode();
+
   const clickOutRef = useOnclickOutside(() => {
     setPopupOpen(false);
   });
 
   const pinClasses = cx(
     'transform transition-colors',
-    'hover:text-yellow-500',
-    { 'text-yellow-500': popupOpen },
-    { 'text-yellow-300': !popupOpen }
+    { 'hover:text-yellow-500': currentMode === 'dark' },
+    { 'hover:text-red-500': currentMode === 'light' },
+    { 'text-yellow-500': popupOpen && currentMode === 'dark' },
+    { 'text-yellow-300': !popupOpen && currentMode === 'dark' },
+    { 'text-red-500': popupOpen && currentMode === 'light' },
+    { 'text-red-300': !popupOpen && currentMode === 'light' }
   );
   const markerClasses = cx(className);
   const popupClasses = cx('z-10');

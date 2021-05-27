@@ -25,12 +25,20 @@ import 'react-contexify/dist/ReactContexify.css';
 import * as Yup from 'yup';
 import { ptForm } from 'yup-locale-pt';
 
+import ptBR from 'date-fns/locale/pt-BR';
+import { useEffect } from 'react';
+import { registerLocale } from 'react-datepicker';
+
 const onRedirectCallback = (appState: AppState) => {
   Router.replace(appState?.returnTo || '/');
 };
 
 export default function App({ Component, pageProps, router }: AppProps) {
   Yup.setLocale(ptForm);
+
+  useEffect(() => {
+    registerLocale('pt-br', ptBR);
+  }, [ptBR]);
 
   return (
     <Auth0Provider
@@ -63,7 +71,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
         </motion.div>
       </Navbar>
 
-      <ToastContainer limit={3} />
+      <ToastContainer limit={3} position='top-center' />
       {/* </SocketIOProvider> */}
     </Auth0Provider>
   );

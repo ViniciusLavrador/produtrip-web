@@ -12,6 +12,7 @@ export const useApi = (resource: string, fetchOptions?: RequestInit, getTokenSil
 
   const { getAccessTokenSilently, getAccessTokenWithPopup } = useAuth0();
   const { data, error, revalidate } = useSWR(`${process.env.NEXT_PUBLIC_API_SERVER_DOMAIN}:3000/${resource}`, async (url) => {
+    if (!resource) return;
     // FIX PORT NUMBER
     const accessToken = await getAccessTokenSilently({
       audience: process.env.NEXT_PUBLIC_API_SERVER_DOMAIN,

@@ -42,7 +42,7 @@ export default function App({ Component, pageProps, router }: AppProps) {
   }, [ptBR]);
 
   return (
-    <RecoilRoot >
+    <RecoilRoot>
       <Auth0Provider
         domain={process.env.NEXT_PUBLIC_AUTH0_TENANT_DOMAIN}
         clientId={process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID}

@@ -4,7 +4,7 @@ export interface getUserRolesProps {
 
 export const getUserRoles = ({ user }: getUserRolesProps) => {
   if (user) {
-    return user[`${process.env.NEXT_PUBLIC_APP_DOMAIN}/roles`] as string[];
+    return user[Object.keys(user).filter((key) => /roles/)[0]] as string[];
   }
 };
 

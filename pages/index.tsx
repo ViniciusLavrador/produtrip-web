@@ -278,7 +278,7 @@ const HomePage = () => {
 
   if (!isAuthenticated) return <WelcomePage />;
 
-  let isAdmin = user && user[`${process.env.NEXT_PUBLIC_APP_DOMAIN}/roles`].includes('ADMIN');
+  let isAdmin = user && user[Object.keys(user).filter((key) => /roles/)[0]].includes('ADMIN');
 
   if (isAuthenticated && isAdmin) return <AuthenticatedAdminHomePage />;
   if (isAuthenticated && !isAdmin) return <AuthenticatedUserHomePage user={user} />;

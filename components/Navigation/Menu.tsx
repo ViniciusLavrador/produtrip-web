@@ -163,7 +163,7 @@ export const Menu = ({ open, expand }: MenuProps) => {
                 exit={{ height: 0, marginTop: 0, marginBottom: 0 }}
                 className='overflow-hidden'
               >
-                {profileItemsByRole[user[`${process.env.NEXT_PUBLIC_APP_DOMAIN}/roles`]]?.map((menuItem) => (
+                {profileItemsByRole[user[Object.keys(user).filter((key) => /roles/)[0]]]?.map((menuItem) => (
                   <MenuItem key={(menuItem.href as string) || menuItem.label} menuItem={menuItem} expand={expand} />
                 ))}
               </motion.div>
@@ -171,7 +171,7 @@ export const Menu = ({ open, expand }: MenuProps) => {
           </AnimatePresence>
         </Profile>
 
-        {menuItemsByRole[user[`${process.env.NEXT_PUBLIC_APP_DOMAIN}/roles`]]?.map((menuItem) => (
+        {menuItemsByRole[user[Object.keys(user).filter((key) => /roles/)[0]]]?.map((menuItem) => (
           <MenuItem menuItem={menuItem} expand={expand} key={(menuItem.href as string) || menuItem.label} />
         ))}
       </div>

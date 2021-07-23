@@ -18,12 +18,12 @@ export const useApi = (resource: string, fetchOptions?: RequestInit, getTokenSil
 
     try {
       accessToken = await getAccessTokenSilently({
-        audience: process.env.NEXT_PUBLIC_API_SERVER_DOMAIN,
+        audience: process.env.NEXT_PUBLIC_API_AUTH0_AUDIENCE,
         ...getTokenSilentlyOptions,
       });
     } catch (error) {
       accessToken = await getAccessTokenWithPopup({
-        audience: process.env.NEXT_PUBLIC_API_SERVER_DOMAIN,
+        audience: process.env.NEXT_PUBLIC_API_AUTH0_AUDIENCE,
         ...getTokenSilentlyOptions,
       });
     }

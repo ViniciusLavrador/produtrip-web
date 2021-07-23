@@ -81,7 +81,7 @@ export const Team = ({}: TeamProps) => {
   const removeUser = async (id: string) => {
     setLoading(true);
     const accessToken = await getAccessTokenSilently({
-      audience: process.env.NEXT_PUBLIC_API_SERVER_DOMAIN,
+      audience: process.env.NEXT_PUBLIC_API_AUTH0_AUDIENCE,
     });
 
     try {

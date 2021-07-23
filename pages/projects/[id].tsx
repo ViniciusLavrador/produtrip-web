@@ -273,7 +273,7 @@ export const Project = ({}: ProjectProps) => {
 
         <div className={FABRowClasses}>
           <Tooltip content='Visitas do Projeto' placement='top'>
-            <Button primary href={`/visits?projectID=${query['id']}`}>
+            <Button primary href={`/visits?projectID=${query['id']}`} disabled>
               <span className='flex flex-row justify-around'>Visitas</span>
             </Button>
           </Tooltip>

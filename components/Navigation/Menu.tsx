@@ -94,13 +94,13 @@ export const Menu = ({ open, expand }: MenuProps) => {
   const menuItemsByRole: { [key: string]: MenuItem[] } = {
     ADMIN: [
       { variant: 'link', label: 'Clientes', href: '/customers', icon: <BriefcaseSolidIcon /> },
-      { variant: 'link', label: 'Equipe', href: '/team', icon: <UserGroupSolidIcon /> },
+      { variant: 'link', label: 'Equipe', href: '/team', icon: <UserGroupSolidIcon />, disabled: true },
       { variant: 'link', label: 'Relatórios', href: '/reports', icon: <ChartBarSolidIcon /> },
       { variant: 'link', label: 'Agenda', href: '/schedule', icon: <CalendarSolidIcon /> },
     ],
     USER: [
       { variant: 'link', label: 'Clientes', href: '/customers', icon: <BriefcaseSolidIcon /> },
-      { variant: 'link', label: 'Equipe', href: '/team', icon: <UserGroupSolidIcon /> },
+      { variant: 'link', label: 'Equipe', href: '/team', icon: <UserGroupSolidIcon />, disabled: true },
       { variant: 'link', label: 'Relatórios', href: '/reports', icon: <ChartBarSolidIcon /> },
       { variant: 'link', label: 'Agenda', href: '/schedule', icon: <CalendarSolidIcon /> },
     ],
@@ -171,9 +171,11 @@ export const Menu = ({ open, expand }: MenuProps) => {
           </AnimatePresence>
         </Profile>
 
-        {menuItemsByRole[user[Object.keys(user).filter((key) => /roles/)[0]]]?.map((menuItem) => (
-          <MenuItem menuItem={menuItem} expand={expand} key={(menuItem.href as string) || menuItem.label} />
-        ))}
+        {menuItemsByRole[user[Object.keys(user).filter((key) => /roles/)[0]]]?.map((menuItem) => {
+          if (!menuItem.disabled) {
+            return <MenuItem menuItem={menuItem} expand={expand} key={(menuItem.href as string) || menuItem.label} />;
+          }
+        })}
       </div>
     </nav>
   );

@@ -12,6 +12,7 @@ type MenuItemVariants = 'button' | 'link';
 export type MenuItem = {
   label: string;
   icon: JSX.Element;
+  disabled?: boolean;
 } & (
   | {
       variant: Extract<MenuItemVariants, 'link'>;

@@ -57,7 +57,7 @@ export const Button = (props: ButtonProps) => {
     className
   );
 
-  if (href) {
+  if (href && !buttonProps.disabled) {
     return (
       <>
         <Link href={href}>

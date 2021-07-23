@@ -1,6 +1,6 @@
 import cx from 'classnames';
 import { ExtendedLogo, Button, Typography } from 'components';
-import Input from 'components/Form/Input';
+// import Input from 'components/Form/Input';
 import { useRouter } from 'next/router';
 import { ChangeEventHandler, useEffect, useState } from 'react';
 
@@ -56,12 +56,12 @@ export const Login = ({}: LoginProps) => {
         </Typography>
 
         <div className='flex flex-col w-full gap-2'>
-          <Input
+          {/* <Input
             name='partnerAuthCode'
             placeholder='Código de Autênticação de Parceiro'
             value={partnerAuthCode}
             onChange={onPartnerCodeChange}
-          />
+          /> */}
           <div className={actionRow}>
             <Button href='/' className='w-full font-bold' label='Voltar' />
             <Button

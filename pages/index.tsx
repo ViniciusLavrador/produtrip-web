@@ -198,6 +198,7 @@ const AuthenticatedUserHomePage = withAuthenticationRequired<{ user: any }>(({ u
               </Typography>
             )}
             {userVisits &&
+              userVisits.visits &&
               userVisits.visits
                 .sort((a, b) => new Date(a.expectedStartTimestamp).getTime() - new Date(b.expectedStartTimestamp).getTime())
                 .map((visit) => {

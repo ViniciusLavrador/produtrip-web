@@ -115,7 +115,12 @@ export const Menu = ({ open, expand }: MenuProps) => {
         icon: currentMode === 'light' ? <MoonSolidIcon /> : <SunSolidIcon />,
       },
       { variant: 'link', label: 'Meu Perfil', href: '/me', icon: <UserSolidIcon /> },
-      { variant: 'button', label: 'Sair', onClick: () => logout(), icon: <LogoutSolidIcon /> },
+      {
+        variant: 'button',
+        label: 'Sair',
+        onClick: () => logout({ returnTo: 'https://produtrip.vercel.app' }),
+        icon: <LogoutSolidIcon />,
+      },
     ],
     USER: [
       {
@@ -125,7 +130,12 @@ export const Menu = ({ open, expand }: MenuProps) => {
         icon: currentMode === 'light' ? <MoonSolidIcon /> : <SunSolidIcon />,
       },
       { variant: 'link', label: 'Meu Perfil', href: '/me', icon: <UserSolidIcon /> },
-      { variant: 'button', label: 'Sair', onClick: () => logout(), icon: <LogoutSolidIcon /> },
+      {
+        variant: 'button',
+        label: 'Sair',
+        onClick: () => logout({ returnTo: 'https://produtrip.vercel.app' }),
+        icon: <LogoutSolidIcon />,
+      },
     ],
   };
 

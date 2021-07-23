@@ -1,5 +1,64 @@
 import { BreadcrumbItemProps, Breadcrumbs } from 'components/Breadcrumbs';
-import { ReactNode } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect, ReactNode } from 'react';
+import { useRecoilState } from 'recoil';
+import { modalOpenAtom } from 'recoil/atoms';
+
+// Layout Modal
+export interface LayoutModalProps {
+  children: React.ReactNode;
+  id: string;
+  className?: string;
+}
+
+export const LayoutModal = ({ children, id, className }: LayoutModalProps) => {
+  const [modalOpenState, setModalOpenState] = useRecoilState(modalOpenAtom);
+
+  // Set Listener to Close Modal on ESC
+  useEffect(() => {
+    const close = (e) => {
+      if (e.keyCode === 27) {
+        setModalOpenState([...modalOpenState.filter((x) => x != id)]);
+      }
+    };
+
+    window.addEventListener('keydown', close);
+
+    return () => window.removeEventListener('keydown', close);
+  }, []);
+
+  return (
+    <AnimatePresence>
+      {modalOpenState.includes(id) && (
+        <>
+          <div className='justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none'>
+            <div className='relative my-6 mx-auto w-[48rem]'>
+              <motion.div
+                initial='closed'
+                animate='open'
+                exit='closed'
+                variants={{ open: { opacity: 1 }, closed: { opacity: 0 } }}
+                className={`border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none ${className}`}
+              >
+                {children}
+              </motion.div>
+            </div>
+          </div>
+          <div className='opacity-25 fixed inset-0 z-40 bg-black' />
+        </>
+      )}
+    </AnimatePresence>
+  );
+};
+
+// Layout FAB
+export interface LayoutFABProps {
+  children: React.ReactNode;
+}
+
+export const LayoutFAB = ({ children }: LayoutFABProps) => {
+  return <div className='fixed bottom-10 right-10 flex flex-row gap-5'>{children}</div>;
+};
 
 // Layout Header
 export interface LayoutHeaderProps {
@@ -47,5 +106,6 @@ export const Layout = ({ children }: LayoutProps) => {
 
 Layout.Header = LayoutHeader;
 Layout.Content = LayoutContent;
-
+Layout.FABRow = LayoutFAB;
+Layout.Modal = LayoutModal;
 export default Layout;

@@ -470,12 +470,8 @@ export const Visits = ({}: VisitsProps) => {
 
   const { data: userData, error: userError, isLoading: userLoading } = useApi(`auth/users`);
 
+  
   useEffect(() => {
-    console.log('lv', loadedVisits);
-  }, [loadedVisits]);
-
-  useEffect(() => {
-    console.log('in');
 
     setLoadedVisits(undefined);
     setPolyline(undefined);

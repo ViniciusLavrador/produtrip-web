@@ -91,14 +91,15 @@ export const POSList = ({ open, setOpen, totalPOSList, initialSelectedPOS, proje
     }
   };
 
-  const rootClasses = cx('w-full bg-white dark:bg-gray-800 rounded p-5', { 'h-max': open }, { 'h-auto': !open });
+  const rootClasses = cx(
+    'w-full bg-white dark:bg-gray-800 rounded p-5 shadow cursor-pointer',
+    { 'h-max': open },
+    { 'h-auto': !open }
+  );
   return (
-    <div className={rootClasses}>
-      <div
-        onClick={() => (open ? setOpen(undefined) : setOpen('posList'))}
-        className='flex flex-row justify-around items-center mb-5 first:pt-0'
-      >
-        <Typography variant='h4' className='text-center cursor-pointer select-none'>
+    <div className={rootClasses} onClick={() => (open ? setOpen(undefined) : setOpen('posList'))}>
+      <div className='flex flex-row justify-around items-center mb-5 first:pt-0'>
+        <Typography variant='h4' className='text-center select-none'>
           Pontos de Venda
         </Typography>
         {open && (
@@ -159,50 +160,6 @@ export const POSList = ({ open, setOpen, totalPOSList, initialSelectedPOS, proje
     </div>
   );
 };
-
-// -- Visits
-// export const VisitsSideBar = ({ open, setOpen, totalPosList }: SideBarProps) => {
-//   const rootClasses = cx('w-full bg-white dark:bg-gray-800 rounded p-5', { 'h-full': open }, { 'h-auto': !open });
-//   return (
-//     <div className={rootClasses}>
-//       <div onClick={() => (open ? setOpen(undefined) : setOpen('visitsList'))}>
-//         <Typography variant='h4' className='text-center cursor-pointer select-none'>
-//           Visitas Agendadas
-//         </Typography>
-//       </div>
-//       {open && (
-//         <motion.div
-//           initial='closed'
-//           animate='open'
-//           exit='closed'
-//           variants={{
-//             open: {
-//               opacity: 1,
-//               height: 'auto',
-//             },
-//             closed: {
-//               opacity: 0,
-//               height: 0,
-//             },
-//           }}
-//         >
-//           <div className='py-3 max-h-[300px] overflow-y-scroll'>
-//             {totalPosList.map((pos) => {
-//               return (
-//                 <label htmlFor={pos.id} className='flex flex-row items-center py-2 px-3' key={pos.id}>
-//                   <input type='checkbox' name={pos.id} className='mr-5 transform-gpu scale-125' />
-//                   <Typography variant='p' className='clear-both'>
-//                     {pos.name}
-//                   </Typography>
-//                 </label>
-//               );
-//             })}
-//           </div>
-//         </motion.div>
-//       )}
-//     </div>
-//   );
-// };
 
 // -- POS Marker
 const toClipboard = (text: string) => {
@@ -318,6 +275,11 @@ export const Project = ({}: ProjectProps) => {
           <Tooltip content='Visitas do Projeto' placement='top'>
             <Button primary href={`/visits?projectID=${query['id']}`}>
               <span className='flex flex-row justify-around'>Visitas</span>
+            </Button>
+          </Tooltip>
+          <Tooltip content='Formulários' placement='top'>
+            <Button primary href={`/forms?projectID=${query['id']}`}>
+              <span className='flex flex-row justify-around'>Formulários</span>
             </Button>
           </Tooltip>
         </div>

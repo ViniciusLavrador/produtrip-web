@@ -13,3 +13,4 @@ export { default as ChevronRightOutlineIcon } from './chevron-right.svg';
 export { default as SumOutlineIcon } from './sum.svg';
 export { default as CheckOutlineIcon } from './check.svg';
 export { default as DuplicateOutlineIcon } from './duplicate.svg';
+export { default as SelectorOutlineIcon } from './selector.svg';

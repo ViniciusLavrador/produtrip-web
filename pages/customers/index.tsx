@@ -11,6 +11,7 @@ import { UserRemoveSolidIcon } from 'public/icons/solid';
 import axios from 'axios';
 import CustomerCard from 'components/Card/CustomerCard';
 import Link from 'next/link';
+import Layout from 'components/Layout/Layout';
 
 const CONTEXT_MENU_ID = 'CustomerPageContextMenu';
 interface CustomersPageContextMenuProps {}
@@ -135,39 +136,49 @@ export const Customers = ({}: CustomersProps) => {
   console.log(data);
 
   return (
-    <>
-      <div className={rootClasses} onContextMenu={show}>
-        {data && (
-          <>
-            <CustomersList
-              customers={data}
-              toggleCustomerSelection={toggleCustomerSelection}
-              customerSelection={customerSelection}
-              removeCustomer={removeCustomer}
-            />
-          </>
-        )}
-        <div className={FABRowClasses}>
-          <motion.div variants={animatedButtonVariants} animate={customerSelection.length > 0 ? 'open' : 'close'}>
-            <Button primary onClick={removeSelected} rounded>
-              <UserRemoveSolidIcon className={iconClasses} />
-            </Button>
-          </motion.div>
+    <Layout>
+      <Layout.Header
+        breadcrumb={{
+          main: { title: 'Clientes' },
+        }}
+      />
+      <Layout.Content>
+        <div className={rootClasses} onContextMenu={show}>
+          {data && (
+            <>
+              <CustomersList
+                customers={data}
+                toggleCustomerSelection={toggleCustomerSelection}
+                customerSelection={customerSelection}
+                removeCustomer={removeCustomer}
+              />
+            </>
+          )}
+          <Layout.FABRow>
+            <div className={FABRowClasses}>
+              <motion.div variants={animatedButtonVariants} animate={customerSelection.length > 0 ? 'open' : 'close'}>
+                <Button primary onClick={removeSelected} rounded>
+                  <UserRemoveSolidIcon className={iconClasses} />
+                </Button>
+              </motion.div>
 
-          <Tooltip content='Adicionar Colaborador' placement='top'>
-            <Button primary href='/customers/new' rounded>
-              <SumOutlineIcon className={iconClasses} />
-            </Button>
-          </Tooltip>
+              <Tooltip content='Adicionar Colaborador' placement='top'>
+                <Button primary href='/customers/new' rounded>
+                  <SumOutlineIcon className={iconClasses} />
+                </Button>
+              </Tooltip>
+            </div>
+          </Layout.FABRow>
+
+          <CustomersPageContextMenu />
         </div>
-        <CustomersPageContextMenu />
-      </div>
-      {loading && (
-        <div className='fixed bottom-20 right-10'>
-          <LoadingAnimation size='xs' />
-        </div>
-      )}
-    </>
+        {loading && (
+          <div className='fixed bottom-20 right-10'>
+            <LoadingAnimation size='xs' />
+          </div>
+        )}
+      </Layout.Content>
+    </Layout>
   );
 };
 

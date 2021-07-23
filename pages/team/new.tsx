@@ -5,6 +5,7 @@ import { useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import Layout from 'components/Layout/Layout';
 
 type NewUserFormType = {
   name: string;
@@ -127,14 +128,19 @@ export interface NewUserPageProps {}
 
 export const NewUserPage = ({}: NewUserPageProps) => {
   return (
-    <div className='h-full w-full'>
-      <div className='flex flex-row justify-center md:justify-between mb-10'>
-        <Typography variant='h3'>Novo Colaborador</Typography>
-      </div>
-      <div className='flex flex-col items-center justify-center'>
-        <NewUserForm />
-      </div>
-    </div>
+    <Layout>
+      <Layout.Header
+        breadcrumb={{
+          main: { title: 'Novo Colaborador' },
+          list: [{ title: 'Colaboradores', href: '/team' }],
+        }}
+      />
+      <Layout.Content>
+        <div className='flex flex-col items-center justify-center'>
+          <NewUserForm />
+        </div>
+      </Layout.Content>
+    </Layout>
   );
 };
 

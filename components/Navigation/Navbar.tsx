@@ -9,7 +9,6 @@ import { MobileOpenButton } from './MobileOpenButton';
 import { UrlObject } from 'url';
 import { Typography, Logo } from 'components';
 import LoadingAnimation from 'components/LoadingAnimation/LoadingAnimation';
-import { motion, AnimateSharedLayout, Variants, Transition } from 'framer-motion';
 import { ChevronRightOutlineIcon, ChevronLeftOutlineIcon } from 'public/icons/outline';
 
 const COPYRIGHT_TEXT = 'Gestão de PDV is a product by 3eConsulting ©';
@@ -48,6 +47,7 @@ export const Navbar = ({ children }: NavbarProps) => {
   const [isMobile, setIsMobile] = useState(false);
 
   const { isAuthenticated, isLoading } = useAuth0();
+
 
   useEffect(() => {
     function onResize([entry]) {

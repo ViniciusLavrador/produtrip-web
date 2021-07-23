@@ -9,6 +9,7 @@ import cx from 'classnames';
 import { AnimatePresence, motion, Variants } from 'framer-motion';
 import { UserRemoveSolidIcon } from 'public/icons/solid';
 import axios from 'axios';
+import Layout from 'components/Layout/Layout';
 
 const CONTEXT_MENU_ID = 'TeamPageContextMenu';
 interface TeamPageContextMenuProps {}
@@ -129,37 +130,44 @@ export const Team = ({}: TeamProps) => {
   };
 
   return (
-    <>
-      <div className={rootClasses} onContextMenu={show}>
-        {data && (
-          <TeamList
-            users={data}
-            toggleUserSelection={toggleUserSelection}
-            userSelection={userSelection}
-            removeUser={removeUser}
-          />
-        )}
-        <div className={FABRowClasses}>
-          <motion.div variants={animatedButtonVariants} animate={userSelection.length > 0 ? 'open' : 'close'}>
-            <Button primary onClick={removeSelected} rounded>
-              <UserRemoveSolidIcon className={iconClasses} />
-            </Button>
-          </motion.div>
+    <Layout>
+      <Layout.Header
+        breadcrumb={{
+          main: { title: 'Colaboradores' },
+        }}
+      />
+      <Layout.Content>
+        <div className={rootClasses} onContextMenu={show}>
+          {data && (
+            <TeamList
+              users={data}
+              toggleUserSelection={toggleUserSelection}
+              userSelection={userSelection}
+              removeUser={removeUser}
+            />
+          )}
+          <div className={FABRowClasses}>
+            <motion.div variants={animatedButtonVariants} animate={userSelection.length > 0 ? 'open' : 'close'}>
+              <Button primary onClick={removeSelected} rounded>
+                <UserRemoveSolidIcon className={iconClasses} />
+              </Button>
+            </motion.div>
 
-          <Tooltip content='Adicionar Colaborador' placement='top'>
-            <Button primary href='/team/new' rounded>
-              <SumOutlineIcon className={iconClasses} />
-            </Button>
-          </Tooltip>
+            <Tooltip content='Adicionar Colaborador' placement='top'>
+              <Button primary href='/team/new' rounded>
+                <SumOutlineIcon className={iconClasses} />
+              </Button>
+            </Tooltip>
+          </div>
+          <TeamPageContextMenu />
         </div>
-        <TeamPageContextMenu />
-      </div>
-      {loading && (
-        <div className='fixed bottom-20 right-10'>
-          <LoadingAnimation size='xs' />
-        </div>
-      )}
-    </>
+        {loading && (
+          <div className='fixed bottom-20 right-10'>
+            <LoadingAnimation size='xs' />
+          </div>
+        )}
+      </Layout.Content>
+    </Layout>
   );
 };
 

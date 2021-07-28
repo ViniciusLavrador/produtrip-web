@@ -102,18 +102,18 @@ export const POSList = ({ open, setOpen, totalPOSList, initialSelectedPOS, proje
         <Typography variant='h4' className='text-center select-none'>
           Pontos de Venda
         </Typography>
-        {open && (
+        {
           <button
             onClick={saveSelection}
             className='bg-yellow-300 hover:bg-yellow-500 rounded-full w-8 h-8 flex flex-row items-center justify-center'
           >
             <CheckOutlineIcon className='h-4 w-4' />
           </button>
-        )}
+        }
       </div>
-      {open && (
+      {
         <motion.div
-          initial='closed'
+          initial='open'
           animate='open'
           exit='closed'
           variants={{
@@ -156,7 +156,7 @@ export const POSList = ({ open, setOpen, totalPOSList, initialSelectedPOS, proje
             })}
           </div>
         </motion.div>
-      )}
+      }
     </div>
   );
 };

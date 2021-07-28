@@ -230,7 +230,12 @@ export const NewVisitModal = ({ pos, setNewVisitPOS, users, visitDate, revalidat
 
   const selectUser = (name: string) => {
     let user = users.find((u) => u.name === name);
-    setSelectedUser(user ? user : undefined);
+    console.log(user, name);
+    if (!user) {
+      setSelectedUser(undefined);
+    } else if (user !== selectedUser) {
+      setSelectedUser(user);
+    }
   };
 
   const intervalReducer = (action: 'INCREASE' | 'DECREASE') => {
@@ -316,13 +321,15 @@ export const NewVisitModal = ({ pos, setNewVisitPOS, users, visitDate, revalidat
                       <select
                         className='w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline cursor-pointer'
                         onChange={(event) => selectUser(event.target.value)}
-                        value={selectedUser ? selectedUser : ''}
+                        value={selectedUser && selectedUser.name ? selectedUser.name : ''}
                       >
                         <option value='' hidden disabled>
                           Selecione um Colaborador
                         </option>
                         {users.map((user) => (
-                          <option key={user.user_id}>{user.name}</option>
+                          <option key={user.user_id} value={user.name}>
+                            {user.name}
+                          </option>
                         ))}
                       </select>
                       <div className='absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none'>
@@ -470,9 +477,7 @@ export const Visits = ({}: VisitsProps) => {
 
   const { data: userData, error: userError, isLoading: userLoading } = useApi(`auth/users`);
 
-  
   useEffect(() => {
-
     setLoadedVisits(undefined);
     setPolyline(undefined);
     if (selectedUsers.length === 0) {

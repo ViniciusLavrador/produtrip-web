@@ -277,8 +277,6 @@ const AuthenticatedUserHomePage = withAuthenticationRequired<{ user: any }>(({ u
 const HomePage = () => {
   const { isAuthenticated, user } = useAuth0();
 
-  return <h1>Develop Branch Deployed</h1>;
-
   if (!isAuthenticated) return <WelcomePage />;
 
   let isAdmin = user && user[Object.keys(user).filter((key) => /roles/)[0]].includes('ADMIN');

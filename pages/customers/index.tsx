@@ -154,21 +154,27 @@ export const Customers = ({}: CustomersProps) => {
               />
             </>
           )}
-          <Layout.FABRow>
-            <div className={FABRowClasses}>
-              <motion.div variants={animatedButtonVariants} animate={customerSelection.length > 0 ? 'open' : 'close'}>
-                <Button primary onClick={removeSelected} rounded>
-                  <UserRemoveSolidIcon className={iconClasses} />
-                </Button>
-              </motion.div>
-
-              <Tooltip content='Adicionar Colaborador' placement='top'>
-                <Button primary href='/customers/new' rounded>
-                  <SumOutlineIcon className={iconClasses} />
-                </Button>
-              </Tooltip>
-            </div>
-          </Layout.FABRow>
+          <Layout.FABRow
+            buttons={[
+              {
+                button: (
+                  <Button primary onClick={removeSelected} rounded>
+                    <UserRemoveSolidIcon className={iconClasses} />
+                  </Button>
+                ),
+                open: customerSelection.length > 0,
+                tooltipContent: 'Remover Cliente',
+              },
+              {
+                button: (
+                  <Button primary href='/customers/new' rounded>
+                    <SumOutlineIcon className={iconClasses} />
+                  </Button>
+                ),
+                tooltipContent: 'Adicionar Cliente',
+              },
+            ]}
+          />
 
           <CustomersPageContextMenu />
         </div>

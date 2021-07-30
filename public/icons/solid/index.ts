@@ -11,3 +11,5 @@ export { default as FolderOpenSolidIcon } from './folder-open.svg';
 export { default as PencilSolidIcon } from './pencil.svg';
 export { default as LocationMarkerSolidIcon } from './location-marker.svg';
 export { default as DuplicateSolidIcon } from './duplicate.svg';
+export { default as ChatAltSolidIcon } from './chat-alt.svg';
+export { default as IdentificationSolidIcon } from './identification.svg';

@@ -1,12 +1,17 @@
 import { useRouter } from 'next/router';
 import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
 import { useApi } from 'hooks';
-import { LoadingAnimation, Typography } from 'components';
+import { Button, LoadingAnimation, Typography } from 'components';
 import { toast } from 'react-toastify';
-import { PencilSolidIcon } from 'public/icons/solid';
+import { IdentificationSolidIcon, PencilSolidIcon } from 'public/icons/solid';
 import cx from 'classnames';
 import { ChangeEventHandler, useState } from 'react';
 import axios from 'axios';
+import { getUserRole } from 'helpers';
+import Layout from 'components/Layout/Layout';
+import { motion } from 'framer-motion';
+import { useModal } from 'hooks/useModal';
+import { useEffect } from 'react';
 
 const ProfileImage = ({ src, uploadTo, revalidate }: { src: string; uploadTo: string; revalidate: any }) => {
   const [loading, setLoading] = useState(false);
@@ -83,9 +88,14 @@ export interface TeamMemberProps {}
 
 export const TeamMember = ({}: TeamMemberProps) => {
   const { query } = useRouter();
+  const { getAccessTokenSilently } = useAuth0();
+  const { openModal, closeModal } = useModal('changeRoleModal');
+
+  const [updateRoleLoading, setUpdateRoleLoading] = useState(false);
+  const [currentRole, setCurrentRole] = useState<string>();
 
   let id = Buffer.from(query['id'] as string, 'base64').toString();
-  let { data, isLoading, error, revalidate } = useApi(`auth/users/${id}`);
+  let { data: user, isLoading, error, revalidate } = useApi(`auth/users/${id}`);
 
   if (error) {
     toast.error(error);
@@ -96,32 +106,108 @@ export const TeamMember = ({}: TeamMemberProps) => {
     return <LoadingAnimation size='2xl' />;
   }
 
-  const user = data;
+  const handleRoleChange = async () => {
+    if (!currentRole) {
+      return;
+    }
+
+    setUpdateRoleLoading(true);
+
+    const accessToken = await getAccessTokenSilently({
+      audience: process.env.NEXT_PUBLIC_API_AUTH0_AUDIENCE,
+    });
+
+    try {
+      await axios.patch(
+        `${process.env.NEXT_PUBLIC_API_SERVER_DOMAIN}:3000/auth/users/${user.user_id}/roles`,
+        {
+          role: currentRole,
+        },
+        {
+          headers: { Authentication: `Bearer ${accessToken}` },
+        }
+      );
+
+      toast.success('Função Alterada com Sucesso');
+      setUpdateRoleLoading(false);
+    } catch (err) {
+      console.error(err);
+      toast.error('Erro ao Alterar Função. Tente Novamente.');
+    } finally {
+      setUpdateRoleLoading(false);
+      closeModal();
+    }
+  };
 
   return (
-    <>
-      <div className='flex flex-col md:flex-row-reverse gap-5'>
-        <div className='w-full'>
-          <Typography variant='h2' className='cols-span-2'>
-            {user.name}
-          </Typography>
-
-          <Typography variant='h5'>@{user.nickname}</Typography>
-
-          <a href={`mailto:${user.email}`}>
-            <Typography variant='p' muted>
-              {user.email}
+    <Layout>
+      <Layout.Header />
+      <Layout.Content>
+        <div className='w-full flex flex-row gap-5'>
+          <div>
+            <ProfileImage
+              src={user.picture}
+              uploadTo={`${process.env.NEXT_PUBLIC_API_SERVER_DOMAIN}:3000/auth/users/${user.user_id}/profile-picture`}
+              revalidate={revalidate}
+            />
+          </div>
+          <div>
+            <Typography variant='h2' className='cols-span-2'>
+              {user.name}
             </Typography>
-          </a>
-        </div>
 
-        <ProfileImage
-          src={user.picture}
-          uploadTo={`${process.env.NEXT_PUBLIC_API_SERVER_DOMAIN}:3000/auth/users/${user.user_id}/profile-picture`}
-          revalidate={revalidate}
-        />
-      </div>
-    </>
+            <Typography variant='h5' muted>
+              @{user.nickname}
+            </Typography>
+
+            <a href={`mailto:${user.email}`}>
+              <Typography variant='p' muted>
+                {user.email}
+              </Typography>
+            </a>
+          </div>
+        </div>
+        <div className='w-full flex flex-row justify-center mt-5'>
+          <h1>ROLE: {getUserRole(user)}</h1>
+        </div>
+      </Layout.Content>
+      <Layout.FABRow
+        buttons={[
+          {
+            button: (
+              <Button onClick={openModal} rounded primary>
+                <IdentificationSolidIcon className='h-6 w-6' />
+              </Button>
+            ),
+            tooltipContent: 'Trocar Função',
+          },
+        ]}
+      />
+      <Layout.Modal id='changeRoleModal' className='py-5 px-3'>
+        <div className='flex flex-col'>
+          <Typography variant='h4' bold>
+            Função
+          </Typography>
+          <select
+            value={currentRole || getUserRole(user)}
+            onChange={(e) => setCurrentRole(e.target.value)}
+            className=' focus:outline-none py-2 my-5 px-3 rounded border-2 w-full'
+          >
+            <option value='ADMIN'>ADMIN</option>
+            <option value='USER'>USER</option>
+          </select>
+        </div>
+        <div className='flex flex-row justify-end gap-3'>
+          <Button label='Cancelar' onClick={closeModal} className='py-2' />
+          <Button primary label='Salvar' onClick={handleRoleChange} className='py-2' />
+        </div>
+        {updateRoleLoading && (
+          <div className='absolute w-full h-full top-auto left-auto'>
+            <LoadingAnimation size='sm' />
+          </div>
+        )}
+      </Layout.Modal>
+    </Layout>
   );
 };
 

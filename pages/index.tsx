@@ -16,6 +16,7 @@ import { useThemeMode } from 'hooks';
 import { Layer, Source } from 'react-map-gl';
 import { Item, Menu } from 'react-contexify';
 import { toGeoJSON } from '@mapbox/polyline';
+import withRole from 'helpers/withRole';
 
 const PARTNERS_LOGIN_URL = '/partners/login';
 
@@ -62,7 +63,7 @@ const WelcomePage = () => {
   );
 };
 
-const AuthenticatedAdminHomePage = withAuthenticationRequired(() => {
+const AuthenticatedAdminHomePage = withRole(() => {
   const rootClasses = cx('w-full h-full flex justify-center items-center');
 
   return (
@@ -70,9 +71,9 @@ const AuthenticatedAdminHomePage = withAuthenticationRequired(() => {
       <Logo size='3xl' className='opacity-30' />
     </div>
   );
-});
+}, 'ADMIN');
 
-const AuthenticatedUserHomePage = withAuthenticationRequired<{ user: any }>(({ user }) => {
+const AuthenticatedUserHomePage = withRole<{ user: any }>(({ user }) => {
   const rootClasses = cx('w-full h-full');
   const [userVisits, setUserVisits] = useState<any>();
 
@@ -160,10 +161,10 @@ const AuthenticatedUserHomePage = withAuthenticationRequired<{ user: any }>(({ u
 
   return (
     <div className={rootClasses}>
-      <div className='mb-5 p-5 flex flex-col lg:flex-row justify-between items-center'>
+      <div className='mb-5 p-5 flex flex-col md:flex-row justify-between items-center'>
         <Typography variant='h3'>Visitas</Typography>
         <div
-          className='cursor-pointer flex flex-row items-center group lg:hover:rounded lg:hover:bg-yellow-300 ;g:hover:bg-opacity-70 px-5 py-3'
+          className='cursor-pointer flex flex-row items-center group md:hover:rounded md:hover:bg-yellow-300 ;g:hover:bg-opacity-70 px-5 py-3'
           onClick={() =>
             date.getDate() === new Date(Date.now()).getDate()
               ? setDate(new Date(date.setDate(date.getDate() + 1)))
@@ -171,18 +172,18 @@ const AuthenticatedUserHomePage = withAuthenticationRequired<{ user: any }>(({ u
           }
         >
           {date.getDate() !== new Date(Date.now()).getDate() && (
-            <div className='mr-2 lg:hidden lg:group-hover:block'>
-              <Typography variant='span' muted className='lg:group-hover:text-black'>
+            <div className='mr-2 md:hidden md:group-hover:block'>
+              <Typography variant='span' muted className='md:group-hover:text-black'>
                 <ChevronLeftOutlineIcon />
               </Typography>
             </div>
           )}
-          <Typography variant='h6' muted className='lg:group-hover:text-black'>
+          <Typography variant='h6' muted className='md:group-hover:text-black'>
             {date.toLocaleDateString()}
           </Typography>
           {date.getDate() === new Date(Date.now()).getDate() && (
-            <div className='ml-2 lg:hidden lg:group-hover:block'>
-              <Typography variant='span' muted className='lg:group-hover:text-black'>
+            <div className='ml-2 md:hidden md:group-hover:block'>
+              <Typography variant='span' muted className='md:group-hover:text-black'>
                 <ChevronRightOutlineIcon />
               </Typography>
             </div>
@@ -190,7 +191,7 @@ const AuthenticatedUserHomePage = withAuthenticationRequired<{ user: any }>(({ u
         </div>
       </div>
       <div className='grid grid-cols-12'>
-        <div className='col-span-full lg:col-span-3 h-full text-center'>
+        <div className='col-span-full md:col-span-3 h-full text-center'>
           <ul className='h-full flex flex-col gap-3 overflow-y-scroll'>
             {(!userVisits || !userVisits.visits || userVisits.visits.length === 0) && (
               <Typography variant='h6' muted bold>
@@ -221,13 +222,13 @@ const AuthenticatedUserHomePage = withAuthenticationRequired<{ user: any }>(({ u
                 })}
           </ul>
         </div>
-        <div className='col-span-full mt-10 lg:mt-0 lg:col-span-9'>
+        <div className='col-span-full mt-10 md:mt-0 md:col-span-9'>
           {!!visitInProgress ? (
             <LoadingAnimation />
           ) : (
             <>
               {(!userVisits || !userVisits.visits || userVisits.visits.length !== 0) && (
-                <div className='h-[400px] lg:h-[550px] rounded shadow'>
+                <div className='h-[400px] md:h-[550px] rounded shadow'>
                   <Map latitude={mapFocus.latitude} longitude={mapFocus.longitude} zoom={mapFocus.zoom}>
                     {userVisits &&
                       userVisits.visits &&

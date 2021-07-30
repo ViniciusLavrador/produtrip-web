@@ -1,6 +1,8 @@
 import { BreadcrumbItemProps, Breadcrumbs } from 'components/Breadcrumbs';
-import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, ReactNode } from 'react';
+import { Button } from 'components/Button';
+import { Tooltip } from 'components/Tooltip';
+import { AnimatePresence, motion, Variants } from 'framer-motion';
+import { useEffect, ReactNode, cloneElement } from 'react';
 import { useRecoilState } from 'recoil';
 import { modalOpenAtom } from 'recoil/atoms';
 
@@ -53,11 +55,40 @@ export const LayoutModal = ({ children, id, className }: LayoutModalProps) => {
 
 // Layout FAB
 export interface LayoutFABProps {
-  children: React.ReactNode;
+  buttons: {
+    button: ReactNode;
+    open?: boolean;
+    tooltipContent?: string;
+  }[];
 }
 
-export const LayoutFAB = ({ children }: LayoutFABProps) => {
-  return <div className='fixed bottom-10 right-10 flex flex-row gap-5'>{children}</div>;
+const animatedButtonVariants: Variants = {
+  open: { scale: 1 },
+  close: { scale: 0 },
+};
+
+export const LayoutFAB = ({ buttons }: LayoutFABProps) => {
+  const ClonedButton = ({ button, ...props }) => cloneElement(button, { ...props });
+
+  return (
+    <div className='fixed bottom-10 right-10 flex flex-row gap-5'>
+      {buttons.map((button) => {
+        if (button.open === undefined) {
+          return (
+            <Tooltip content={button.tooltipContent} placement='top'>
+              <ClonedButton button={button.button} />
+            </Tooltip>
+          );
+        }
+
+        return (
+          <motion.div variants={animatedButtonVariants} animate={button.open ? 'open' : 'close'}>
+            <ClonedButton button={button.button} />
+          </motion.div>
+        );
+      })}
+    </div>
+  );
 };
 
 // Layout Header

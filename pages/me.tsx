@@ -1,13 +1,14 @@
 import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
 import { Avatar, Typography } from 'components';
-import { useApi } from '../hooks/useAPI';
+import { getUserRole } from 'helpers';
+import withRole from 'helpers/withRole';
 
 export const MePage = () => {
   const { user } = useAuth0();
 
   return (
     <div className='flex flex-col w-full h-full justify-center items-center gap-5'>
-      <Avatar src={user.picture} size='lg' alt={`avatar ${user.nickname}`} />
+      <Avatar src={user.picture} size='lg' alt={`avatar de ${user.nickname}`} isAdmin={getUserRole(user) === 'USER'} />
 
       <div className='text-center'>
         <Typography variant='h3' className='font-light'>
@@ -21,4 +22,4 @@ export const MePage = () => {
   );
 };
 
-export default withAuthenticationRequired(MePage);
+export default withRole(MePage, 'ADMIN');

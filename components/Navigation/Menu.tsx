@@ -11,11 +11,15 @@ import {
   MoonSolidIcon,
   SunSolidIcon,
   UserSolidIcon,
+  ChatAltSolidIcon,
 } from 'public/icons/solid';
 import { ChevronUpOutlineIcon, ChevronDownOutlineIcon } from 'public/icons/outline';
 import { ReactNode, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useThemeMode } from 'hooks';
+import { getUserRole } from 'helpers';
+import { useEffect } from 'react';
+import { constSelector } from 'recoil';
 
 interface ProfileRowProps {
   user: any;
@@ -46,7 +50,7 @@ export const Profile = ({ user, expand, isOpen, toggleOpen, children }: ProfileR
     <div className={rootClasses}>
       <div className={profileContainerClasses} onClick={toggleOpen}>
         <div className={avatarClasses}>
-          <Avatar src={user.picture} size='2xs' alt={`avatar de ${user.nickname}`} />
+          <Avatar src={user.picture} size='2xs' alt={`avatar de ${user.nickname}`} isAdmin={getUserRole(user) === 'ADMIN'} />
         </div>
 
         {expand && (
@@ -97,12 +101,11 @@ export const Menu = ({ open, expand }: MenuProps) => {
       { variant: 'link', label: 'Equipe', href: '/team', icon: <UserGroupSolidIcon /> },
       { variant: 'link', label: 'Relatórios', href: '/reports', icon: <ChartBarSolidIcon /> },
       { variant: 'link', label: 'Agenda', href: '/schedule', icon: <CalendarSolidIcon /> },
+      { variant: 'link', label: 'Chat', href: '/chat', icon: <ChatAltSolidIcon /> },
     ],
     USER: [
-      { variant: 'link', label: 'Clientes', href: '/customers', icon: <BriefcaseSolidIcon /> },
-      { variant: 'link', label: 'Equipe', href: '/team', icon: <UserGroupSolidIcon /> },
-      { variant: 'link', label: 'Relatórios', href: '/reports', icon: <ChartBarSolidIcon /> },
       { variant: 'link', label: 'Agenda', href: '/schedule', icon: <CalendarSolidIcon /> },
+      { variant: 'link', label: 'Chat', href: '/chat', icon: <ChatAltSolidIcon /> },
     ],
   };
 
@@ -157,8 +160,6 @@ export const Menu = ({ open, expand }: MenuProps) => {
     { 'translate-y-0': open }
   );
 
-  console.log(Object.keys(user).filter((key) => /roles/));
-
   return (
     <nav className={navMenuClasses}>
       <div>
@@ -175,7 +176,7 @@ export const Menu = ({ open, expand }: MenuProps) => {
                 exit={{ height: 0, marginTop: 0, marginBottom: 0 }}
                 className='overflow-hidden'
               >
-                {profileItemsByRole[user[Object.keys(user).filter((key) => /roles/)[0]]]?.map((menuItem) => (
+                {profileItemsByRole[getUserRole(user)]?.map((menuItem) => (
                   <MenuItem key={(menuItem.href as string) || menuItem.label} menuItem={menuItem} expand={expand} />
                 ))}
               </motion.div>
@@ -183,7 +184,7 @@ export const Menu = ({ open, expand }: MenuProps) => {
           </AnimatePresence>
         </Profile>
 
-        {menuItemsByRole[user[Object.keys(user).filter((key) => /roles/)[0]]]?.map((menuItem) => {
+        {menuItemsByRole[getUserRole(user)]?.map((menuItem) => {
           if (!menuItem.disabled) {
             return <MenuItem menuItem={menuItem} expand={expand} key={(menuItem.href as string) || menuItem.label} />;
           }

@@ -1,1 +1,1 @@
-export * from './getUserRoles';
+export * from './getUserRole';

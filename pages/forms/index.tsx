@@ -117,13 +117,18 @@ export const FormsPage = ({}: FormsPageProps) => {
         </div>
       </Layout.Modal>
 
-      <Layout.FABRow>
-        <Tooltip content='Adicionar Formulário' placement='top'>
-          <Button primary onClick={openModal} rounded>
-            <SumOutlineIcon className='h-6 w-6' />
-          </Button>
-        </Tooltip>
-      </Layout.FABRow>
+      <Layout.FABRow
+        buttons={[
+          {
+            button: (
+              <Button primary onClick={openModal} rounded>
+                <SumOutlineIcon className='h-6 w-6' />
+              </Button>
+            ),
+            tooltipContent: 'Adicionar Formulário',
+          },
+        ]}
+      />
     </Layout>
   );
 };

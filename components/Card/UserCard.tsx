@@ -7,6 +7,7 @@ import { useThemeMode } from 'hooks';
 import { UserRemoveSolidIcon, FolderOpenSolidIcon } from 'public/icons/solid';
 import { CheckOutlineIcon } from 'public/icons/outline';
 import { MouseEventHandler } from 'react';
+import { getUserRole } from 'helpers';
 
 interface UserCardContextMenuProps {
   id: string;
@@ -76,6 +77,7 @@ export const UserCard = ({
     'relative',
     'transition-transform transform-gpu',
     'active:scale-95 active:shadow',
+    'h-36',
     { 'active:shadow': linkToUser },
     { 'hover:scale-105': scaleOnHover },
     { 'ring-2 ring-yellow-300': selected },

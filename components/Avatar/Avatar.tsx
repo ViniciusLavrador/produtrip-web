@@ -6,9 +6,10 @@ interface AvatarProps {
   src: string;
   alt: string;
   className?: string;
+  isAdmin?: boolean;
 }
 
-export const Avatar = ({ size, src, alt, className }: AvatarProps) => {
+export const Avatar = ({ size, src, alt, className, isAdmin }: AvatarProps) => {
   const rootClasses = cx(
     'relative',
     { 'w-10 h-10 p-1': size == '2xs' },
@@ -27,6 +28,7 @@ export const Avatar = ({ size, src, alt, className }: AvatarProps) => {
   return (
     <div className={rootClasses}>
       <Image src={src} alt={alt} layout='fill' objectFit='cover' className='rounded-full' />
+      {isAdmin && <span className='w-3 h-3 rounded-full bg-yellow-500 dark:bg-yellow-300 absolute top-0 right-0' />}
     </div>
   );
 };

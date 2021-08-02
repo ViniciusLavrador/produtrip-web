@@ -10,7 +10,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 //Socket.IO
-import { SocketIOProvider } from 'use-socketio'; // Testing use-socket.io
+import { SocketIOProvider } from 'components/SocketIO'; // Testing use-socket.io
 
 // CSS (tailwind)
 import '../styles/globals.css';
@@ -49,32 +49,30 @@ export default function App({ Component, pageProps, router }: AppProps) {
         redirectUri={typeof window !== 'undefined' ? window.location.origin : process.env.NEXT_PUBLIC_APP_DOMAIN}
         onRedirectCallback={onRedirectCallback}
       >
-        <Head>
-          <title>Gestão de PDV - Produtrip</title>
-        </Head>
-        {/* <SocketIOProvider url={process.env.NEXT_PUBLIC_SOCKETIO_SERVER_DOMAIN}> */}
-
-        <Navbar>
-          <motion.div
-            key={router.route}
-            className='h-full w-full'
-            initial='pageInitial'
-            animate='pageAnimate'
-            variants={{
-              pageInitial: {
-                opacity: 0,
-              },
-              pageAnimate: {
-                opacity: 1,
-              },
-            }}
-          >
-            <Component {...pageProps} />
-          </motion.div>
-        </Navbar>
-
-        <ToastContainer limit={3} position='top-center' />
-        {/* </SocketIOProvider> */}
+        <SocketIOProvider url='http://api.produtrip.com.br:3001'>
+          <Head>
+            <title>Gestão de PDV - Produtrip</title>
+          </Head>
+          <Navbar>
+            <motion.div
+              key={router.route}
+              className='h-full w-full'
+              initial='pageInitial'
+              animate='pageAnimate'
+              variants={{
+                pageInitial: {
+                  opacity: 0,
+                },
+                pageAnimate: {
+                  opacity: 1,
+                },
+              }}
+            >
+              <Component {...pageProps} />
+            </motion.div>
+          </Navbar>
+          <ToastContainer limit={3} position='top-center' />
+        </SocketIOProvider>
       </Auth0Provider>
     </RecoilRoot>
   );

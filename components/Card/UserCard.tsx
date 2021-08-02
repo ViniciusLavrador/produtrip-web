@@ -4,7 +4,7 @@ import { Typography } from 'components/Typography';
 import { useContextMenu, Menu, Item, Separator, TriggerEvent, ItemParams } from 'react-contexify';
 import cx from 'classnames';
 import { useThemeMode } from 'hooks';
-import { UserRemoveSolidIcon, FolderOpenSolidIcon } from 'public/icons/solid';
+import { UserRemoveSolidIcon, FolderOpenSolidIcon, ChatAltSolidIcon } from 'public/icons/solid';
 import { CheckOutlineIcon } from 'public/icons/outline';
 import { MouseEventHandler } from 'react';
 import { getUserRole } from 'helpers';
@@ -34,6 +34,15 @@ export const UserCardContextMenu = ({ id, removeUser }: UserCardContextMenuProps
           <div className={itemContainerClasses}>
             Ver Mais
             <FolderOpenSolidIcon className={iconClasses} />
+          </div>
+        </Link>
+      </Item>
+      <Separator />
+      <Item>
+        <Link href={`/team/${Buffer.from(id).toString('base64')}/chat`}>
+          <div className={itemContainerClasses}>
+            Conversar
+            <ChatAltSolidIcon className={iconClasses} />
           </div>
         </Link>
       </Item>

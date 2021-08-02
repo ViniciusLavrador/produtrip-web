@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import { useApi } from 'hooks';
 import { toast } from 'react-toastify';
 import { Message, Room } from 'components/Chat/types';
+import withRole from 'helpers/withRole';
 
 // export const ChatPage = () => {
 //   const [messages, setMessages] = useState([]);
@@ -167,4 +168,4 @@ const ChatPage = () => {
   );
 };
 
-export default ChatPage;
+export default withRole(ChatPage);

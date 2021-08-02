@@ -12,6 +12,7 @@ import Layout from 'components/Layout/Layout';
 import { motion } from 'framer-motion';
 import { useModal } from 'hooks/useModal';
 import { useEffect } from 'react';
+import withRole from 'helpers/withRole';
 
 const ProfileImage = ({ src, uploadTo, revalidate }: { src: string; uploadTo: string; revalidate: any }) => {
   const [loading, setLoading] = useState(false);
@@ -211,4 +212,4 @@ export const TeamMember = ({}: TeamMemberProps) => {
   );
 };
 
-export default withAuthenticationRequired(TeamMember);
+export default withRole(TeamMember);

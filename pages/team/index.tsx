@@ -10,6 +10,7 @@ import { AnimatePresence, motion, Variants } from 'framer-motion';
 import { UserRemoveSolidIcon } from 'public/icons/solid';
 import axios from 'axios';
 import Layout from 'components/Layout/Layout';
+import withRole from 'helpers/withRole';
 
 const CONTEXT_MENU_ID = 'TeamPageContextMenu';
 interface TeamPageContextMenuProps {}
@@ -171,4 +172,4 @@ export const Team = ({}: TeamProps) => {
   );
 };
 
-export default withAuthenticationRequired(Team);
+export default withRole(Team);

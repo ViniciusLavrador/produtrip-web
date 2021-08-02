@@ -105,6 +105,7 @@ export const Menu = ({ open, expand }: MenuProps) => {
     ],
     USER: [
       { variant: 'link', label: 'Agenda', href: '/schedule', icon: <CalendarSolidIcon /> },
+      { variant: 'link', label: 'Equipe', href: '/team', icon: <UserGroupSolidIcon /> },
       { variant: 'link', label: 'Chat', href: '/chat', icon: <ChatAltSolidIcon /> },
     ],
   };

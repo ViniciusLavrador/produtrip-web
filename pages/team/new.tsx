@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Layout from 'components/Layout/Layout';
+import withRole from 'helpers/withRole';
 
 type NewUserFormType = {
   name: string;
@@ -144,4 +145,4 @@ export const NewUserPage = ({}: NewUserPageProps) => {
   );
 };
 
-export default withAuthenticationRequired(NewUserPage);
+export default withRole(NewUserPage, 'ADMIN');

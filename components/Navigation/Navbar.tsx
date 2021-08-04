@@ -48,7 +48,6 @@ export const Navbar = ({ children }: NavbarProps) => {
 
   const { isAuthenticated, isLoading } = useAuth0();
 
-
   useEffect(() => {
     function onResize([entry]) {
       if (entry.contentRect.width < 768) {

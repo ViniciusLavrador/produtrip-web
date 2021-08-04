@@ -49,30 +49,30 @@ export default function App({ Component, pageProps, router }: AppProps) {
         redirectUri={typeof window !== 'undefined' ? window.location.origin : process.env.NEXT_PUBLIC_APP_DOMAIN}
         onRedirectCallback={onRedirectCallback}
       >
-        <SocketIOProvider url='http://api.produtrip.com.br:3001'>
-          <Head>
-            <title>Gestão de PDV - Produtrip</title>
-          </Head>
-          <Navbar>
-            <motion.div
-              key={router.route}
-              className='h-full w-full'
-              initial='pageInitial'
-              animate='pageAnimate'
-              variants={{
-                pageInitial: {
-                  opacity: 0,
-                },
-                pageAnimate: {
-                  opacity: 1,
-                },
-              }}
-            >
-              <Component {...pageProps} />
-            </motion.div>
-          </Navbar>
-          <ToastContainer limit={3} position='top-center' />
-        </SocketIOProvider>
+        {/* <SocketIOProvider url='http://api.produtrip.com.br:3001'> */}
+        <Head>
+          <title>Gestão de PDV - Produtrip</title>
+        </Head>
+        <Navbar>
+          <motion.div
+            key={router.route}
+            className='h-full w-full'
+            initial='pageInitial'
+            animate='pageAnimate'
+            variants={{
+              pageInitial: {
+                opacity: 0,
+              },
+              pageAnimate: {
+                opacity: 1,
+              },
+            }}
+          >
+            <Component {...pageProps} />
+          </motion.div>
+        </Navbar>
+        <ToastContainer limit={3} position='top-center' />
+        {/* </SocketIOProvider> */}
       </Auth0Provider>
     </RecoilRoot>
   );

@@ -1,6 +1,5 @@
 import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
 import { Button, FormField, LoadingAnimation, Tooltip, Typography } from 'components';
-import { Breadcrumbs } from 'components/Breadcrumbs';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useApi } from 'hooks';
 import { useRouter } from 'next/router';
@@ -224,6 +223,7 @@ export const Project = ({}: ProjectProps) => {
         breadcrumb={{
           main: { title: projectData.name, subtitle: projectData.contract },
           list: [
+            { title: 'Clientes', href: '/customers' },
             { title: projectData.company.name, href: `/customers/${Buffer.from(projectData.company.id).toString('base64')}` },
           ],
         }}

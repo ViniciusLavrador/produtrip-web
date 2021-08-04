@@ -67,9 +67,11 @@ const AuthenticatedAdminHomePage = withRole(() => {
   const rootClasses = cx('w-full h-full flex justify-center items-center');
 
   return (
-    <div className={rootClasses}>
-      <Logo size='3xl' className='opacity-30' />
-    </div>
+    <>
+      <div className={rootClasses}>
+        <Logo size='3xl' className='opacity-30' />
+      </div>
+    </>
   );
 }, 'ADMIN');
 

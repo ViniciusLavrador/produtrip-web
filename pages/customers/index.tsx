@@ -133,8 +133,6 @@ export const Customers = ({}: CustomersProps) => {
     );
   };
 
-  console.log(data);
-
   return (
     <Layout>
       <Layout.Header

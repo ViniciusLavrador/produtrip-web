@@ -6,6 +6,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
 import { useApi } from 'hooks';
+import Layout from 'components/Layout/Layout';
 
 type NewPOSFormType = {
   name: string;
@@ -93,22 +94,34 @@ export const NewCustomerPage = ({}: NewCustomerPageProps) => {
   const router = useRouter();
   let companyID = Buffer.from(router.query['company'] as string, 'base64').toString();
 
-  const { data, error } = useApi(`companies/${companyID}`);
+  const { data, isLoading, error } = useApi(`companies/${companyID}`);
 
   if (error) {
     toast.error('Cliente não encontrado.');
     router.push('/customers');
   }
 
+  if (isLoading) {
+    return <LoadingAnimation />;
+  }
+
   return (
-    <div className='h-full w-full'>
-      <div className='flex flex-row justify-center md:justify-between mb-10'>
-        <Typography variant='h3'>{`Novo PDV - ${data && data.name}`}</Typography>
-      </div>
-      <div className='flex flex-col items-center justify-center'>
-        <NewPOSForm />
-      </div>
-    </div>
+    <Layout>
+      <Layout.Header
+        breadcrumb={{
+          main: { title: 'Novo Ponto de Venda' },
+          list: [
+            { title: 'Clientes', href: '/customers' },
+            { title: data && data.name, href: `/customers/${router.query['company']}` },
+          ],
+        }}
+      />
+      <Layout.Content>
+        <div className='flex flex-col items-center justify-center'>
+          <NewPOSForm />
+        </div>
+      </Layout.Content>
+    </Layout>
   );
 };
 

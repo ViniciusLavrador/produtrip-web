@@ -1,12 +1,12 @@
 import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
-import { Typography, LoadingAnimation, Form } from 'components';
+import { LoadingAnimation, Form } from 'components';
 import * as yup from 'yup';
 import { useRef, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
 import { useApi } from 'hooks';
-import { Breadcrumbs } from 'components/Breadcrumbs';
+import Layout from 'components/Layout/Layout';
 
 type NewProjectFormType = {
   name: string;
@@ -95,31 +95,34 @@ export const NewCustomerPage = ({}: NewCustomerPageProps) => {
   const router = useRouter();
   let companyID = Buffer.from(router.query['company'] as string, 'base64').toString();
 
-  const { data, error } = useApi(`companies/${companyID}`);
+  const { data, error, isLoading } = useApi(`companies/${companyID}`);
 
   if (error) {
     toast.error('Cliente não encontrado.');
     router.push('/customers');
   }
 
-  return (
-    <div className='h-full w-full'>
-      {data && (
-        <div className='w-full mb-5'>
-          <Breadcrumbs>
-            <Breadcrumbs.ListItem
-              title={data && data.name}
-              href={`/customers/${data && Buffer.from(data.id).toString('base64')}`}
-            />
-            <Breadcrumbs.MainItem title='Novo Projeto' />
-          </Breadcrumbs>
-        </div>
-      )}
+  if (isLoading) {
+    return <LoadingAnimation />;
+  }
 
-      <div className='flex flex-col items-center justify-center'>
-        <NewProjectForm />
-      </div>
-    </div>
+  return (
+    <Layout>
+      <Layout.Header
+        breadcrumb={{
+          main: { title: 'Novo Projeto' },
+          list: [
+            { title: 'Clientes', href: '/customers' },
+            { title: data && data.name, href: `/customers/${router.query['company']}` },
+          ],
+        }}
+      />
+      <Layout.Content>
+        <div className='flex flex-col items-center justify-center'>
+          <NewProjectForm />
+        </div>
+      </Layout.Content>
+    </Layout>
   );
 };
 

@@ -101,12 +101,12 @@ export const Menu = ({ open, expand }: MenuProps) => {
       { variant: 'link', label: 'Equipe', href: '/team', icon: <UserGroupSolidIcon /> },
       { variant: 'link', label: 'Relatórios', href: '/reports', icon: <ChartBarSolidIcon /> },
       { variant: 'link', label: 'Agenda', href: '/schedule', icon: <CalendarSolidIcon /> },
-      { variant: 'link', label: 'Chat', href: '/chat', icon: <ChatAltSolidIcon /> },
+      // { variant: 'link', label: 'Chat', href: '/chat', icon: <ChatAltSolidIcon /> },
     ],
     USER: [
       { variant: 'link', label: 'Agenda', href: '/schedule', icon: <CalendarSolidIcon /> },
       { variant: 'link', label: 'Equipe', href: '/team', icon: <UserGroupSolidIcon /> },
-      { variant: 'link', label: 'Chat', href: '/chat', icon: <ChatAltSolidIcon /> },
+      // { variant: 'link', label: 'Chat', href: '/chat', icon: <ChatAltSolidIcon /> },
     ],
   };
 

@@ -40,7 +40,7 @@ export const LayoutModal = ({ children, id, className }: LayoutModalProps) => {
                 animate='open'
                 exit='closed'
                 variants={{ open: { opacity: 1 }, closed: { opacity: 0 } }}
-                className={`border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none ${className}`}
+                className={`border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white dark:bg-gray-800 outline-none focus:outline-none ${className}`}
               >
                 {children}
               </motion.div>
@@ -71,18 +71,18 @@ export const LayoutFAB = ({ buttons }: LayoutFABProps) => {
   const ClonedButton = ({ button, ...props }) => cloneElement(button, { ...props });
 
   return (
-    <div className='fixed bottom-10 right-10 flex flex-row gap-5'>
-      {buttons.map((button) => {
+    <div className='fixed bottom-10 right-10 flex flex-row gap-5 z-50'>
+      {buttons.map((button, index) => {
         if (button.open === undefined) {
           return (
-            <Tooltip content={button.tooltipContent} placement='top'>
+            <Tooltip content={button.tooltipContent} placement='top' key={index}>
               <ClonedButton button={button.button} />
             </Tooltip>
           );
         }
 
         return (
-          <motion.div variants={animatedButtonVariants} animate={button.open ? 'open' : 'close'}>
+          <motion.div variants={animatedButtonVariants} animate={button.open ? 'open' : 'close'} key={index}>
             <ClonedButton button={button.button} />
           </motion.div>
         );
@@ -97,22 +97,28 @@ export interface LayoutHeaderProps {
     list?: Omit<BreadcrumbItemProps, 'subtitle'>[];
     main: Omit<BreadcrumbItemProps, 'href'>;
   };
+  leftComponent?: ReactNode;
   children?: ReactNode;
 }
 
-export const LayoutHeader = ({ breadcrumb, children }: LayoutHeaderProps) => {
+export const LayoutHeader = ({ breadcrumb, children, leftComponent }: LayoutHeaderProps) => {
   return (
-    <div className='w-full mb-5'>
-      {breadcrumb && (
-        <Breadcrumbs>
-          {breadcrumb.list &&
-            breadcrumb.list.map((item, index) => (
-              <Breadcrumbs.ListItem key={index.toString()} title={item.title} href={item.href} />
-            ))}
-          <Breadcrumbs.MainItem title={breadcrumb.main.title} subtitle={breadcrumb.main.subtitle} />
-        </Breadcrumbs>
-      )}
-      {children}
+    <div className='w-full mb-5 flex flex-row justify-between'>
+      <div className=' flex flex-row gap-5 items-center justify-center'>
+        {leftComponent}
+        <div>
+          {breadcrumb && (
+            <Breadcrumbs>
+              {breadcrumb.list &&
+                breadcrumb.list.map((item, index) => (
+                  <Breadcrumbs.ListItem key={index.toString()} title={item.title} href={item.href} />
+                ))}
+              <Breadcrumbs.MainItem title={breadcrumb.main.title} subtitle={breadcrumb.main.subtitle} />
+            </Breadcrumbs>
+          )}
+        </div>
+      </div>
+      <div>{children}</div>
     </div>
   );
 };

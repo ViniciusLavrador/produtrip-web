@@ -73,6 +73,7 @@ export const CustomerCard = ({
   };
 
   const rootClasses = cx(
+    'flex flex-col',
     'relative',
     'transition-transform transform-gpu',
     'active:scale-95 active:shadow',
@@ -93,7 +94,7 @@ export const CustomerCard = ({
   );
 
   const iconClasses = cx('w-5 h-5', 'stroke-current text-white dark:text-gray-900');
-  const imageClasses = cx('bg-white', 'h-full', 'rounded-l-lg');
+  const imageClasses = cx('bg-white', 'h-20');
   const contentContainerClasses = cx('flex flex-col justify-evenly');
 
   const clickableCard = cx('h-full w-full', { 'cursor-pointer': typeof onClick === 'function' });
@@ -105,18 +106,19 @@ export const CustomerCard = ({
           <CheckOutlineIcon className={iconClasses} />
         </div>
       )}
-      {!textOnly && customer.picture && (
+      {!textOnly && customer.image && (
         <div className='w-full h-full p-3'>
-          <Card.Image src={customer.picture} alt='logo' className={imageClasses} />
+          <Card.Image src={customer.image} alt='logo' className={imageClasses} />
         </div>
       )}
-      {(!customer.picture || textOnly) && (
-        <Card.Content className={contentContainerClasses}>
-          <Typography variant='span' bold>
-            {customer.name}
-          </Typography>
-        </Card.Content>
-      )}
+      <Card.Content className={contentContainerClasses}>
+        <Typography variant='span' bold>
+          {customer.name}
+        </Typography>
+        <Typography variant='span' bold muted className='text-xs'>
+          {customer.CNPJ}
+        </Typography>
+      </Card.Content>
     </Card>
   );
 

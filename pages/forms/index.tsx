@@ -87,6 +87,7 @@ export const FormsPage = ({}: FormsPageProps) => {
         breadcrumb={{
           main: { title: 'Formulários' },
           list: [
+            { title: 'Clientes', href: '/customers' },
             {
               title: `${projectData.company.name}`,
               href: `/customers/${Buffer.from(projectData.company.id).toString('base64')}`,
@@ -98,6 +99,19 @@ export const FormsPage = ({}: FormsPageProps) => {
       <Layout.Content>
         <FormList forms={projectData.forms} projectID={query['projectID'] as string} />
       </Layout.Content>
+      <Layout.FABRow
+        buttons={[
+          {
+            button: (
+              <Button primary onClick={openModal} rounded>
+                <SumOutlineIcon className='h-6 w-6' />
+              </Button>
+            ),
+            tooltipContent: 'Adicionar Formulário',
+          },
+        ]}
+      />
+
       <Layout.Modal id='newFormModal' className='py-5 px-3'>
         <div className='flex flex-col'>
           <Typography variant='h3' bold>
@@ -112,23 +126,18 @@ export const FormsPage = ({}: FormsPageProps) => {
           />
         </div>
         <div className='flex flex-row justify-end gap-3'>
-          <Button label='Cancelar' onClick={closeModal} className='py-2' />
-          <Button primary label='Salvar' onClick={() => saveNewForm(newFormTitle)} className='py-2' />
+          <Button label='Cancelar' onClick={closeModal} className='py-2 bg-white' />
+          <Button
+            primary
+            label='Salvar'
+            onClick={() => {
+              closeModal();
+              saveNewForm(newFormTitle);
+            }}
+            className='py-2'
+          />
         </div>
       </Layout.Modal>
-
-      <Layout.FABRow
-        buttons={[
-          {
-            button: (
-              <Button primary onClick={openModal} rounded>
-                <SumOutlineIcon className='h-6 w-6' />
-              </Button>
-            ),
-            tooltipContent: 'Adicionar Formulário',
-          },
-        ]}
-      />
     </Layout>
   );
 };
